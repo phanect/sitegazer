@@ -1,0 +1,51 @@
+version: 2.1
+
+executors:
+  default:
+    working_directory: ~/siteaudit
+    docker:
+      - image: circleci/node:latest
+
+commands:
+  init:
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: install dependences
+          command: yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+
+jobs:
+  build:
+    executor:
+      name: default
+    steps:
+      - init
+      - run:
+          name: test
+          command: yarn test && yarn lint
+
+  release:
+    executor:
+      name: default
+    steps:
+      - init
+      
+      - run: yarn release
+workflows:
+  version: 2.1
+  build-and-release:
+    jobs:
+      - build
+      - release:
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - build

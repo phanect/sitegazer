@@ -1,0 +1,25 @@
+{
+  "name": "sitelint",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "author": "Jumpei Ogawa <phanective@gmail.com>",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "lint": "eslint --ext=.js,.jsx,.ts,.tsx .",
+    "release": "yarn publish --access public --non-interactive",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@phanect/eslint-plugin": "latest",
+    "@types/node": "^12.0.2",
+    "eslint": "latest",
+    "ts-node": "latest",
+    "typescript": "^3.4.5"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  }
+}

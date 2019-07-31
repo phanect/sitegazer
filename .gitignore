@@ -1,0 +1,51 @@
+#
+# System
+#
+
+# Logs
+logs/
+*.log
+
+# PIDs
+*.pid
+*.seed
+*.pid.lock
+pids
+
+# File manager configs
+.directory
+Thumbs.db
+*.DS_Store
+
+#
+# JavaScript
+#
+# NPM
+.npm/
+node_modules/
+npm-debug.log*
+
+# Node.js
+.node_repl_history
+
+# Yarn
+.yarn-integrity
+yarn-debug.log*
+yarn-error.log*
+
+
+# yarn is the package manager for this project. Ignore npm's lock file.
+package-lock.json
+
+
+# Build tools: Babel & Webpack
+dist/
+
+# Other tools
+
+# Ava
+test/snapshots/
+.eslintcache
+
+# React Native
+.expo/
