@@ -7,6 +7,7 @@ class SiteLint {
   private crawler: Crawler;
   private results: Result[];
   private plugins: Plugin[];
+  private config: Config;
 
   public get Results(): Result[] {
     return this.results;
@@ -14,8 +15,9 @@ class SiteLint {
 
   public constructor(private url: string, config: Config) {
     const self = this;
+    self.config = config;
 
-    self.plugins = config.plugins.map(plugin => {
+    self.plugins = self.config.plugins.map(plugin => {
       const APlugin = require(`./plugins/${plugin}`);
       return new APlugin();
     });
