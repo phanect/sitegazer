@@ -1,7 +1,8 @@
 "use strict";
 
+import Context from "./Context";
 import Result from "./Result";
 
 export default interface Plugin {
-  analyze(url: string): Promise<Result[]>;
+  analyze(context: Context): Promise<Result[]>;
 }

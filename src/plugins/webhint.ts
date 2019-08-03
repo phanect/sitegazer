@@ -1,6 +1,7 @@
 "use strict";
 
 import { Analyzer } from "hint";
+import Context from "../interfaces/Context";
 import Plugin from "../interfaces/Plugin";
 import Result from "../interfaces/Result";
 
@@ -23,8 +24,8 @@ export default class WebHint implements Plugin {
     });
   }
 
-  public async analyze(url: string): Promise<Result[]> {
-    const results = await this.webhint.analyze(url);
+  public async analyze(context: Context): Promise<Result[]> {
+    const results = await this.webhint.analyze(context.url);
 
     for (const result of results) {
       console.log(`Result for: ${result.url}`);

@@ -1,6 +1,7 @@
 "use strict";
 
 import vnu = require("vnu");
+import Context from "../interfaces/Context";
 import Plugin from "../interfaces/Plugin";
 import Result from "../interfaces/Result";
 
@@ -12,8 +13,8 @@ interface NuResult {
 }
 
 export default class NuHTMLChecker implements Plugin {
-  public async analyze(url: string): Promise<Result[]> {
-    const results: NuResult[] = await vnu(url);
+  public async analyze(context: Context): Promise<Result[]> {
+    const results: NuResult[] = await vnu(context.url);
 
     return results.map((result) => ({
       url: result.url,
