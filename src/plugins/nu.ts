@@ -6,10 +6,10 @@ import Plugin from "../interfaces/Plugin";
 import Result from "../interfaces/Result";
 
 interface NuResult {
-  url: string,
-  message: string,
-  lastLine: number,
-  firstColumn: number,
+  url: string;
+  message: string;
+  lastLine: number;
+  firstColumn: number;
 }
 
 export default class NuHTMLChecker implements Plugin {
