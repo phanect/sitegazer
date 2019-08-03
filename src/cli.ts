@@ -13,7 +13,9 @@ commander
         join(process.cwd(), ".sitelintrc.js")
       );
 
-      const sitelint = new SiteLint(url, config);
+      config.urls.push(url);
+
+      const sitelint = new SiteLint(config);
       await sitelint.start();
 
       for (const result of sitelint.Results) {

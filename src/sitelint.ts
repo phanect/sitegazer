@@ -2,6 +2,7 @@ import { Crawler, handlers, Url } from "supercrawler";
 import Config from "./interfaces/Config";
 import Plugin from "./interfaces/Plugin";
 import Result from "./interfaces/Result";
+import { deduplicate } from "./utils";
 
 class SiteLint {
   private crawler: Crawler;
@@ -13,7 +14,7 @@ class SiteLint {
     return this.results;
   }
 
-  public constructor(private url: string, config: Config) {
+  public constructor(config: Config) {
     const self = this;
     self.config = config;
 
@@ -33,7 +34,15 @@ class SiteLint {
     self.crawler.addHandler(handlers.robotsParser());
     self.crawler.addHandler(handlers.sitemapsParser());
     self.crawler.addHandler("text/html", handlers.htmlLinkParser({
-      hostnames: [ new URL(url).hostname ],
+      hostnames: deduplicate(self.config.urls.map(url => {
+        if (typeof url === "string") {
+          return new URL(url).hostname;
+        } else if (typeof url === "object") {
+          return new URL(url.url).hostname;
+        } else {
+          throw new Error("Invalid configuration: malformed URL in urls.");
+        }
+      })),
     }));
 
     self.crawler.addHandler("text/html", async (context) => {
@@ -52,10 +61,18 @@ class SiteLint {
 
   public async start(): Promise<{}> {
     const self = this;
+    const urlList = self.crawler.getUrlList();
 
-    await self.crawler
-      .getUrlList()
-      .insertIfNotExists(new Url(self.url));
+    await Promise.all(self.config.urls.map(url => {
+      if (typeof url === "string") {
+        return urlList.insertIfNotExists(new Url(url));
+      } else if (typeof url === "object") {
+        return urlList.insertIfNotExists(new Url(url.url));
+      } else {
+        throw new Error("Invalid configuration: malformed URL in urls.");
+      }
+    }));
+
     self.crawler.start();
 
     return new Promise((resolve) => {
