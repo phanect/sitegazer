@@ -16,9 +16,6 @@ export default interface Config {
   sitemap: boolean;
   crawl: boolean;
   plugins: string[];
-  userAgents?: {
-    name: string;
-    uas: string;
-  }[];
+  userAgents?: object[];
   config?: any;
 }

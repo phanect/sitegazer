@@ -1,11 +1,12 @@
 "use strict";
 
+import Context from "../interfaces/Context";
 import Plugin from "../interfaces/Plugin";
 import Result from "../interfaces/Result";
 
 
 export default class HTTP implements Plugin {
-  public async analyze(context): Promise<Result[]> {
+  public async analyze(context: Context): Promise<Result[]> {
     const errors = [];
     const res = await fetch(context.url, {
       method: "GET",
