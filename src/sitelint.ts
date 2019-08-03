@@ -10,10 +10,6 @@ class SiteLint {
   private plugins: Plugin[];
   private config: Config;
 
-  public get Results(): Result[] {
-    return this.results;
-  }
-
   public constructor(config: Config) {
     const self = this;
     self.config = config;
@@ -59,7 +55,7 @@ class SiteLint {
     });
   }
 
-  public async start(): Promise<{}> {
+  public async run(): Promise<Result[]> {
     const self = this;
     const urlList = self.crawler.getUrlList();
 
@@ -77,7 +73,7 @@ class SiteLint {
 
     return new Promise((resolve) => {
       self.crawler.on("urllistcomplete", () => {
-        resolve();
+        resolve(self.results);
       });
     });
   }

@@ -16,9 +16,9 @@ commander
       config.urls.push(url);
 
       const sitelint = new SiteLint(config);
-      await sitelint.start();
+      const results = await sitelint.run();
 
-      for (const result of sitelint.Results) {
+      for (const result of results) {
         console.info(result.url);
         console.info(result.pluginName);
 
