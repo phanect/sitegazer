@@ -34,15 +34,7 @@ class SiteLint {
 
     self.crawler.addHandler(handlers.sitemapsParser());
     self.crawler.addHandler("text/html", handlers.htmlLinkParser({
-      hostnames: deduplicate(self.config.urls.map(url => {
-        if (typeof url === "string") {
-          return new URL(url).hostname;
-        } else if (typeof url === "object") {
-          return new URL(url.url).hostname;
-        } else {
-          throw new Error("Invalid configuration: malformed URL in urls.");
-        }
-      })),
+      hostnames: deduplicate(self.config.urls).map(url => new URL(url).hostname),
     }));
 
     self.crawler.addHandler("text/html", async (context) => {
@@ -66,15 +58,9 @@ class SiteLint {
     const self = this;
     const urlList = self.crawler.getUrlList();
 
-    await Promise.all(self.config.urls.map(url => {
-      if (typeof url === "string") {
-        return urlList.insertIfNotExists(new Url(url));
-      } else if (typeof url === "object") {
-        return urlList.insertIfNotExists(new Url(url.url));
-      } else {
-        throw new Error("Invalid configuration: malformed URL in urls.");
-      }
-    }));
+    await Promise.all(
+      self.config.urls.map(url => urlList.insertIfNotExists(new Url(url)))
+    );
 
     self.crawler.start();
 
