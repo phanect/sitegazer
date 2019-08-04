@@ -19,10 +19,7 @@ class SiteLint {
     const self = this;
     self.config = config;
 
-    self.plugins = self.config.plugins.map(plugin => {
-      const APlugin = require(`./plugins/${plugin}`);
-      return new APlugin();
-    });
+    self.plugins = self.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
 
     self.crawler = new Crawler({
       interval: 2000,
@@ -45,7 +42,7 @@ class SiteLint {
       }
 
       for (const plugin of self.plugins) {
-        const results = await plugin.analyze({
+        const results = await plugin({
           url: context.url,
           userAgents: self.config.userAgents || [ defaultUAS ],
         });

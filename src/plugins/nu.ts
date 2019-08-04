@@ -12,18 +12,22 @@ interface NuResult {
   firstColumn: number;
 }
 
-export default class NuHTMLChecker implements Plugin {
-  public async analyze(context: Context): Promise<Result[]> {
-    const results: NuResult[] = await vnu(context.url);
+/**
+ * Lint with Nu HTML Checker.
+ *
+ * @param {Context} context - The context object passed from SiteLint.
+ * @returns {Promise<Result[]>} The promise object of array of Results.
+ */
+export default (async (context: Context): Promise<Result[]> => {
+  const results: NuResult[] = await vnu(context.url);
 
-    return results.map((result) => ({
-      url: result.url,
-      pluginName: "Nu HTML Checker",
-      errors: [{
-        message: result.message,
-        line: result.lastLine,
-        column: result.firstColumn,
-      }],
-    }));
-  }
-}
+  return results.map((result) => ({
+    url: result.url,
+    pluginName: "Nu HTML Checker",
+    errors: [{
+      message: result.message,
+      line: result.lastLine,
+      column: result.firstColumn,
+    }],
+  }));
+}) as Plugin;
