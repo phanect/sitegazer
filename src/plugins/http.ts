@@ -45,7 +45,7 @@ export default (async (context: Context): Promise<Result[]> => {
       const actualValue = res.headers.get(header)
 
       if (Array.isArray(expectedValue)) {
-        if (!expectedValue.some(expected => expected === actualValue)) {
+        if (!expectedValue.includes(actualValue)) {
           errors.push({
             url: context.url,
             message: `Expected ${header} to be one of ${expectedValue.join(", ")}, but actually ${actualValue}.`,
