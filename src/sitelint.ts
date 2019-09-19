@@ -16,12 +16,11 @@ class SiteLint {
   private config: Config;
 
   public constructor(config: Config) {
-    const self = this;
-    self.config = config;
+    this.config = config;
 
-    self.plugins = self.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
+    this.plugins = this.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
 
-    self.crawler = new Crawler({
+    this.crawler = new Crawler({
       interval: 2000,
       concurrentRequestsLimit: 1,
       robotsEnabled: false,
@@ -29,20 +28,20 @@ class SiteLint {
       userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
     });
 
-    if (self.config.sitemap !== false) {
-      self.crawler.addHandler(handlers.sitemapsParser());
+    if (this.config.sitemap !== false) {
+      this.crawler.addHandler(handlers.sitemapsParser());
     }
 
-    self.crawler.addHandler("text/html", handlers.htmlLinkParser({
-      hostnames: deduplicate(self.config.urls).map(url => new URL(url).hostname),
+    this.crawler.addHandler("text/html", handlers.htmlLinkParser({
+      hostnames: deduplicate(this.config.urls).map(url => new URL(url).hostname),
     }));
 
-    self.crawler.on("crawledurl", async (url: string, errorCode: string, statusCode: number) => {
+    this.crawler.on("crawledurl", async (url: string, errorCode: string, statusCode: number) => {
       console.info("Processed ", url);
 
       if (errorCode) {
         if (errorCode === "REQUEST_ERROR") {
-          self.results.push({
+          this.results.push({
             url,
             pluginName: null,
             errors: [{
@@ -53,7 +52,7 @@ class SiteLint {
             }],
           });
         } else {
-          self.results.push({
+          this.results.push({
             url,
             pluginName: null,
             errors: [{
@@ -67,29 +66,28 @@ class SiteLint {
       }
 
 
-      for (const plugin of self.plugins) {
+      for (const plugin of this.plugins) {
         const results = await plugin({
           url: url,
-          userAgents: self.config.userAgents || [ defaultUAS ],
+          userAgents: this.config.userAgents || [ defaultUAS ],
         });
-        self.results = self.results.concat(results);
+        this.results = this.results.concat(results);
       }
     });
   }
 
   public async run(): Promise<Result[]> {
-    const self = this;
-    const urlList = self.crawler.getUrlList();
+    const urlList = this.crawler.getUrlList();
 
     await Promise.all(
-      self.config.urls.map(url => urlList.insertIfNotExists(new Url(url)))
+      this.config.urls.map(url => urlList.insertIfNotExists(new Url(url)))
     );
 
-    self.crawler.start();
+    this.crawler.start();
 
     return new Promise((resolve) => {
-      self.crawler.on("urllistcomplete", () => {
-        resolve(self.results);
+      this.crawler.on("urllistcomplete", () => {
+        resolve(this.results);
       });
     });
   }
