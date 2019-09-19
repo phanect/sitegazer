@@ -16,17 +16,14 @@ commander
       config.urls.push(url);
 
       const sitelint = new SiteLint(config);
-      const results = await sitelint.run();
+      const warnings = await sitelint.run();
 
-      for (const result of results) {
-        console.info(result.url);
-        console.info(result.pluginName);
-
-        for (const error of result.errors) {
-          console.info(error.message);
-          console.info(error.line);
-          console.info(error.column);
-        }
+      for (const warning of warnings) {
+        console.info(warning.url);
+        console.info(warning.pluginName);
+        console.info(warning.message);
+        console.info(warning.line);
+        console.info(warning.column);
       }
     })();
   }).parse(process.argv);

@@ -17,10 +17,8 @@ export default (async (context: Context): Promise<Result[]> => {
   return results.map(result => ({
     url: result.url,
     pluginName: "Nu HTML Checker",
-    errors: [{
-      message: result.message,
-      line: result.lastLine,
-      column: result.firstColumn,
-    }],
+    message: result.message,
+    line: result.lastLine,
+    column: result.firstColumn,
   }));
 }) as Plugin;

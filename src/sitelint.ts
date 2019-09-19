@@ -44,23 +44,19 @@ class SiteLint {
           this.results.push({
             url,
             pluginName: null,
-            errors: [{
-              message: `Error: Request failure for ${url}. `
-                + (statusCode ? `HTTP Status Code is ${statusCode}` : "Server doesn't respond."),
-              line: 1,
-              column: 1,
-            }],
+            message: `Error: Request failure for ${url}. `
+              + (statusCode ? `HTTP Status Code is ${statusCode}` : "Server doesn't respond."),
+            line: 1,
+            column: 1,
           });
         } else {
           this.results.push({
             url,
             pluginName: null,
-            errors: [{
-              message: `Error: Unexpected error on downloading ${url}. Error code is ${errorCode}. `
-                + (statusCode ? `HTTP Status Code is ${statusCode}` : "No status code was given."),
-              line: 1,
-              column: 1,
-            }],
+            message: `Error: Unexpected error on downloading ${url}. Error code is ${errorCode}. `
+              + (statusCode ? `HTTP Status Code is ${statusCode}` : "No status code was given."),
+            line: 1,
+            column: 1,
           });
         }
       }

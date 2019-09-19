@@ -25,22 +25,19 @@ export default (async (context: Context): Promise<Result[]> => {
     formatters: [],
   });
   const results = await webhint.analyze(context.url);
+  const warnings: Warning[] = [];
 
   for (const result of results) {
-    console.log(`Result for: ${result.url}`);
-
     for (const problem of result.problems) {
-      console.log(`${problem.hintId} - ${problem.resource} - ${problem.message}`);
+      warnings.push({
+        url: result.url,
+        pluginName: "WebHint",
+        message: problem.message,
+        line: 0,
+        column: 0,
+      });
     }
   }
 
-  return results.map((result) => ({
-    url: result.url,
-    pluginName: "WebHint",
-    errors: result.problems.map((problem) => ({
-      message: problem.message,
-      line: 0,
-      column: 0,
-    })),
-  }));
+  return warnings;
 }) as Plugin;

@@ -71,10 +71,8 @@ test("SiteLint returns an error if specified host doesn't respond.", async () =>
   expect(results).toEqual([{
     url: "http://localhost:7171",
     pluginName: null,
-    errors: [{
-      message: "Error: Request failure for http://localhost:7171. Server doesn't respond.",
-      line: 1,
-      column: 1,
-    }],
+    message: "Error: Request failure for http://localhost:7171. Server doesn't respond.",
+    line: 1,
+    column: 1,
   }]);
 });

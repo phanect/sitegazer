@@ -1,8 +1,8 @@
 "use strict";
 
 import Context from "./Context";
-import Result from "./Result";
+import Warning from "./Warning";
 
 export default interface Plugin {
-  (context: Context): Promise<Result[]>;
+  (context: Context): Promise<Warning[]>;
 }
