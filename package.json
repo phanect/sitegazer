@@ -5,9 +5,9 @@
   "keywords": [],
   "author": "Jumpei Ogawa <phanective@gmail.com>",
   "private": true,
-  "main": "dist/src/sitelint.js",
+  "main": "dist/sitelint.js",
   "bin": {
-    "siteaudit": "./dist/src/cli.js"
+    "siteaudit": "./dist/cli.js"
   },
   "scripts": {
     "start": "ts-node ./src/cli.ts",
