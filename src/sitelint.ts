@@ -29,7 +29,10 @@ class SiteLint {
       userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
     });
 
-    self.crawler.addHandler(handlers.sitemapsParser());
+    if (self.config.sitemap !== false) {
+      self.crawler.addHandler(handlers.sitemapsParser());
+    }
+
     self.crawler.addHandler("text/html", handlers.htmlLinkParser({
       hostnames: deduplicate(self.config.urls).map(url => new URL(url).hostname),
     }));
