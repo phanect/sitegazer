@@ -14,7 +14,7 @@
     "build": "tsc",
     "lint": "eslint --ext=.js,.jsx,.ts,.tsx .",
     "release": "yarn publish --access public --non-interactive",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "dependencies": {
     "@hint/connector-chrome": "^4.0.2",
