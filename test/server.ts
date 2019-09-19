@@ -1,51 +1,62 @@
+import { Server } from "http";
 import express = require("express");
 
-const app = express();
-const port: number = 3456;
+export default class {
+  private server: Server;
 
-app.get("/", (req, res) => {
-  res.send(`
-    <html>
-      <head>
-        <title></title>
-      </head>
-      <body>
-        <a href="/link1.html">link 1</a>
-        <a href="/link2.html">link 2</a>
-      </body>
-    </html>
-  `);
-});
+  start() {
+    const app = express();
+    const port: number = 3456;
 
-app.get("/link1", (req, res) => {
-  res.send(`
-    <html>
-      <head>
-        <title></title>
-      </head>
-      <body>
-        <a href="/">top</a>
-        <a href="/link2.html">link 2</a>
-      </body>
-    </html>
-  `);
-});
+    app.get("/", (req, res) => {
+      res.send(`
+        <html>
+          <head>
+            <title></title>
+          </head>
+          <body>
+            <a href="/link1.html">link 1</a>
+            <a href="/link2.html">link 2</a>
+          </body>
+        </html>
+      `);
+    });
 
-app.get("/link2", (req, res) => {
-  res.send(`
-    <html>
-      <head>
-        <title></title>
-      </head>
-      <body>
-        <a href="/link1.html">link 1</a>
-        <a href="/">top</a>
-        <span> <!-- Error: unmatched HTML tag -->
-      </body>
-    </html>
-  `);
-});
+    app.get("/link1", (req, res) => {
+      res.send(`
+        <html>
+          <head>
+            <title></title>
+          </head>
+          <body>
+            <a href="/">top</a>
+            <a href="/link2.html">link 2</a>
+          </body>
+        </html>
+      `);
+    });
 
-app.listen(port, () => {
-  console.log(`server is listening on ${port}`);
-});
+    app.get("/link2", (req, res) => {
+      res.send(`
+        <html>
+          <head>
+            <title></title>
+          </head>
+          <body>
+            <a href="/link1.html">link 1</a>
+            <a href="/">top</a>
+            <span> <!-- Error: unmatched HTML tag -->
+          </body>
+        </html>
+      `);
+    });
+
+    this.server = app.listen(port, () => {
+      console.log(`server is listening on ${port}`);
+    });
+  }
+
+  close() {
+    this.server.close();
+  }
+}
