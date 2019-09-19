@@ -11,7 +11,7 @@ const defaultUAS = {
 
 class SiteLint {
   private crawler: Crawler;
-  private results: Result[];
+  private results: Result[] = [];
   private plugins: Plugin[];
   private config: Config;
 
@@ -36,10 +36,6 @@ class SiteLint {
 
     self.crawler.addHandler("text/html", async (context) => {
       console.info("Processed ", context.url);
-
-      if (!Array.isArray(self.results)) {
-        self.results = [];
-      }
 
       for (const plugin of self.plugins) {
         const results = await plugin({
