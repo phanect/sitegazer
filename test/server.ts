@@ -15,8 +15,8 @@ export default class {
             <title></title>
           </head>
           <body>
-            <a href="/link1.html">link 1</a>
-            <a href="/link2.html">link 2</a>
+            <a href="/link1">link 1</a>
+            <a href="/link2">link 2</a>
           </body>
         </html>
       `);
@@ -30,7 +30,7 @@ export default class {
           </head>
           <body>
             <a href="/">top</a>
-            <a href="/link2.html">link 2</a>
+            <a href="/link2">link 2</a>
           </body>
         </html>
       `);
@@ -43,7 +43,7 @@ export default class {
             <title></title>
           </head>
           <body>
-            <a href="/link1.html">link 1</a>
+            <a href="/link1">link 1</a>
             <a href="/">top</a>
             <span> <!-- Error: unmatched HTML tag -->
           </body>
