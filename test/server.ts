@@ -10,9 +10,10 @@ export default class {
 
     app.get("/", (req, res) => {
       res.send(`
+        <!DOCTYPE html>
         <html>
           <head>
-            <title></title>
+            <title>test</title>
           </head>
           <body>
             <a href="/link1">link 1</a>
@@ -24,9 +25,10 @@ export default class {
 
     app.get("/link1", (req, res) => {
       res.send(`
+        <!DOCTYPE html>
         <html>
           <head>
-            <title></title>
+            <title>test</title>
           </head>
           <body>
             <a href="/">top</a>
@@ -38,9 +40,10 @@ export default class {
 
     app.get("/link2", (req, res) => {
       res.send(`
+        <!DOCTYPE html>
         <html>
           <head>
-            <title></title>
+            <title>test</title>
           </head>
           <body>
             <a href="/link1">link 1</a>
