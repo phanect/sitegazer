@@ -3,15 +3,15 @@
 import { Analyzer } from "hint";
 import Context from "../interfaces/Context";
 import Plugin from "../interfaces/Plugin";
-import Result from "../interfaces/Result";
+import Warning from "../interfaces/Warning";
 
 /**
  * Lint with webhint.
  *
  * @param {Context} context - The context object passed from SiteLint.
- * @returns {Promise<Result[]>} The promise object of array of Results.
+ * @returns {Promise<Warning[]>} The promise object of array of Warning.
  */
-export default (async (context: Context): Promise<Result[]> => {
+export default (async (context: Context): Promise<Warning[]> => {
   const webhint: Analyzer = Analyzer.create({
     extends: [ "web-recommended" ],
     // connector: {

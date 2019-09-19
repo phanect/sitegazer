@@ -1,7 +1,7 @@
 import { Crawler, handlers, Url } from "supercrawler";
 import Config from "./interfaces/Config";
 import Plugin from "./interfaces/Plugin";
-import Result from "./interfaces/Result";
+import Warning from "./interfaces/Warning";
 import { deduplicate } from "./utils";
 
 const defaultUAS = {
@@ -11,7 +11,7 @@ const defaultUAS = {
 
 class SiteLint {
   private crawler: Crawler;
-  private results: Result[] = [];
+  private warnings: Warning[] = [];
   private plugins: Plugin[];
   private config: Config;
 
@@ -41,7 +41,7 @@ class SiteLint {
 
       if (errorCode) {
         if (errorCode === "REQUEST_ERROR") {
-          this.results.push({
+          this.warnings.push({
             url,
             pluginName: null,
             message: `Error: Request failure for ${url}. `
@@ -50,7 +50,7 @@ class SiteLint {
             column: 1,
           });
         } else {
-          this.results.push({
+          this.warnings.push({
             url,
             pluginName: null,
             message: `Error: Unexpected error on downloading ${url}. Error code is ${errorCode}. `
@@ -63,16 +63,16 @@ class SiteLint {
 
 
       for (const plugin of this.plugins) {
-        const results = await plugin({
+        const warnings = await plugin({
           url: url,
           userAgents: this.config.userAgents || [ defaultUAS ],
         });
-        this.results = this.results.concat(results);
+        this.warnings = this.warnings.concat(warnings);
       }
     });
   }
 
-  public async run(): Promise<Result[]> {
+  public async run(): Promise<Warning[]> {
     const urlList = this.crawler.getUrlList();
 
     await Promise.all(
@@ -83,9 +83,9 @@ class SiteLint {
 
     return new Promise((resolve) => {
       this.crawler.on("urllistcomplete", () => {
-        resolve(this.results);
+        resolve(this.warnings);
       });
-    });
+    }) as Promise<Warning[]>;
   }
 }
 

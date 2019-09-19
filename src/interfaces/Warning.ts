@@ -1,6 +1,6 @@
 "use strict";
 
-export default interface Result {
+export default interface Warning {
   url: string;
   pluginName: string;
   message: string;

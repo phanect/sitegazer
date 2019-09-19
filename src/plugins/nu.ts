@@ -3,22 +3,22 @@
 import { vnu } from "vnu";
 import Context from "../interfaces/Context";
 import Plugin from "../interfaces/Plugin";
-import Result from "../interfaces/Result";
+import Warning from "../interfaces/Warning";
 
 /**
  * Lint with Nu HTML Checker.
  *
  * @param {Context} context - The context object passed from SiteLint.
- * @returns {Promise<Result[]>} The promise object of array of Results.
+ * @returns {Promise<Warning[]>} The promise object of array of Warning.
  */
-export default (async (context: Context): Promise<Result[]> => {
-  const results = await vnu(context.url);
+export default (async (context: Context): Promise<Warning[]> => {
+  const warnings = await vnu(context.url);
 
-  return results.map(result => ({
-    url: result.url,
+  return warnings.map(warning => ({
+    url: warning.url,
     pluginName: "Nu HTML Checker",
-    message: result.message,
-    line: result.lastLine,
-    column: result.firstColumn,
+    message: warning.message,
+    line: warning.lastLine,
+    column: warning.firstColumn,
   }));
 }) as Plugin;
