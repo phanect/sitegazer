@@ -34,12 +34,39 @@ class SiteLint {
       hostnames: deduplicate(self.config.urls).map(url => new URL(url).hostname),
     }));
 
-    self.crawler.addHandler("text/html", async (context) => {
-      console.info("Processed ", context.url);
+    self.crawler.on("crawledurl", async (url: string, errorCode: string, statusCode: number) => {
+      console.info("Processed ", url);
+
+      if (errorCode) {
+        if (errorCode === "REQUEST_ERROR") {
+          self.results.push({
+            url,
+            pluginName: null,
+            errors: [{
+              message: `Error: Request failure for ${url}. `
+                + (statusCode ? `HTTP Status Code is ${statusCode}` : "Server doesn't respond."),
+              line: 1,
+              column: 1,
+            }],
+          });
+        } else {
+          self.results.push({
+            url,
+            pluginName: null,
+            errors: [{
+              message: `Error: Unexpected error on downloading ${url}. Error code is ${errorCode}. `
+                + (statusCode ? `HTTP Status Code is ${statusCode}` : "No status code was given."),
+              line: 1,
+              column: 1,
+            }],
+          });
+        }
+      }
+
 
       for (const plugin of self.plugins) {
         const results = await plugin({
-          url: context.url,
+          url: url,
           userAgents: self.config.userAgents || [ defaultUAS ],
         });
         self.results = self.results.concat(results);
