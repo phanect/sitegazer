@@ -54,9 +54,7 @@ export default class {
       `);
     });
 
-    this.server = app.listen(port, () => {
-      console.log(`server is listening on ${port}`);
-    });
+    this.server = app.listen(port, () => {});
   }
 
   close() {
