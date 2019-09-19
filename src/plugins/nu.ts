@@ -1,16 +1,9 @@
 "use strict";
 
-import vnu = require("vnu");
+import { vnu } from "vnu";
 import Context from "../interfaces/Context";
 import Plugin from "../interfaces/Plugin";
 import Result from "../interfaces/Result";
-
-interface NuResult {
-  url: string;
-  message: string;
-  lastLine: number;
-  firstColumn: number;
-}
 
 /**
  * Lint with Nu HTML Checker.
@@ -19,9 +12,9 @@ interface NuResult {
  * @returns {Promise<Result[]>} The promise object of array of Results.
  */
 export default (async (context: Context): Promise<Result[]> => {
-  const results: NuResult[] = await vnu(context.url);
+  const results = await vnu(context.url);
 
-  return results.map((result) => ({
+  return results.map(result => ({
     url: result.url,
     pluginName: "Nu HTML Checker",
     errors: [{

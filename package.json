@@ -22,7 +22,7 @@
     "@hint/connector-puppeteer": "^1.0.0",
     "hint": "^5.0.1",
     "supercrawler": "^1.7.0",
-    "vnu": "^0.0.1"
+    "vnu": "19.9.4"
   },
   "devDependencies": {
     "@phanect/eslint-plugin": "latest",
