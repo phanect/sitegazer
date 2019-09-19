@@ -24,7 +24,7 @@ class SiteLint {
     self.crawler = new Crawler({
       interval: 2000,
       concurrentRequestsLimit: 1,
-      // Time (ms) to cache the results of robots.txt queries.
+      robotsEnabled: false,
       robotsCacheTime: 3600000,
       userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
     });
