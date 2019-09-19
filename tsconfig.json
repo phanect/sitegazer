@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "alwaysStrict": true,
-    "declaration": false,
+    "declaration": true,
+    "declarationDir": "./dist/types/",
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": [
