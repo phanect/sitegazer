@@ -1,8 +1,8 @@
 {
   "name": "sitelint",
   "version": "0.0.1",
-  "description": "",
-  "keywords": [],
+  "description": "SiteLint crawls all of your pages and find errors from the crawled pages",
+  "keywords": [ "linter", "crawler" ],
   "author": "Jumpei Ogawa <phanective@gmail.com>",
   "license": "Apache-2.0",
   "main": "dist/sitelint.js",
