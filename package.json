@@ -1,5 +1,5 @@
 {
-  "name": "sitelint",
+  "name": "@phanect/sitelint",
   "version": "0.0.1",
   "description": "SiteLint crawls all of your pages and find errors from the crawled pages",
   "keywords": [ "linter", "crawler" ],
