@@ -7,7 +7,7 @@
   "private": true,
   "main": "dist/sitelint.js",
   "bin": {
-    "siteaudit": "./dist/cli.js"
+    "sitelint": "./dist/cli.js"
   },
   "scripts": {
     "start": "ts-node ./src/cli.ts",

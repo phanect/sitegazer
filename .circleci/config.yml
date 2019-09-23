@@ -2,7 +2,7 @@ version: 2.1
 
 executors:
   default:
-    working_directory: ~/siteaudit
+    working_directory: ~/sitelint
     docker:
       - image: circleci/node:latest
 
