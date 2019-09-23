@@ -1,0 +1,10 @@
+.circleci/
+src/
+test/
+types/
+.editorconfig
+.eslintrc.js
+.gitattributes
+.gitignore
+jest.config.js
+tsconfig.json
