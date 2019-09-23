@@ -4,7 +4,7 @@
   "description": "",
   "keywords": [],
   "author": "Jumpei Ogawa <phanective@gmail.com>",
-  "private": true,
+  "license": "Apache-2.0",
   "main": "dist/sitelint.js",
   "bin": {
     "sitelint": "./dist/cli.js"
