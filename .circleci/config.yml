@@ -28,15 +28,15 @@ jobs:
       - init
       - run:
           name: test
-          command: yarn test && yarn lint
+          command: yarn build && yarn test && yarn lint
 
   release:
     executor:
       name: default
     steps:
       - init
-      
-      - run: yarn release
+      - run: yarn build && yarn release
+
 workflows:
   version: 2.1
   build-and-release:
