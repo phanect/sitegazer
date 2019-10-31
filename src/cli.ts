@@ -15,7 +15,9 @@ commander.parse(process.argv);
     join(process.cwd(), ".sitelintrc.js")
   );
 
-  config.urls.push(commander.url);
+  if (commander.url) {
+    config.urls.push(commander.url);
+  }
 
   const sitelint = new SiteLint(config);
   const warnings = await sitelint.run();
