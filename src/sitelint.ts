@@ -1,3 +1,4 @@
+import EventEmitter = require("events");
 import { Crawler, handlers, Url } from "supercrawler";
 import Config from "./interfaces/Config";
 import Plugin from "./interfaces/Plugin";
@@ -14,6 +15,8 @@ class SiteLint {
   private warnings: Warning[] = [];
   private plugins: Plugin[];
   private config: Config;
+  private proccessingURLcount = 0;
+  private emitter = new EventEmitter();
 
   public constructor(config: Config) {
     this.config = config;
@@ -36,8 +39,9 @@ class SiteLint {
       hostnames: deduplicate(this.config.urls).map(url => new URL(url).hostname),
     }));
 
-    this.crawler.on("crawledurl", async (url: string, errorCode: string, statusCode: number) => {
+    this.crawler.on("crawledurl", (url: string, errorCode: string, statusCode: number) => {
       console.info("Processed ", url);
+      this.proccessingURLcount++;
 
       if (errorCode) {
         if (errorCode === "REQUEST_ERROR") {
@@ -61,14 +65,18 @@ class SiteLint {
         }
       }
 
+      (async () => {
+        for (const plugin of this.plugins) {
+          const warnings = await plugin({
+            url: url,
+            userAgents: this.config.userAgents || [ defaultUAS ],
+          });
 
-      for (const plugin of this.plugins) {
-        const warnings = await plugin({
-          url: url,
-          userAgents: this.config.userAgents || [ defaultUAS ],
-        });
-        this.warnings = this.warnings.concat(warnings);
-      }
+          this.warnings = this.warnings.concat(warnings);
+        }
+
+        this.proccessingURLcount--;
+      })();
     });
   }
 
@@ -83,7 +91,10 @@ class SiteLint {
 
     return new Promise((resolve) => {
       this.crawler.on("urllistcomplete", () => {
-        resolve(this.warnings);
+        if (this.proccessingURLcount < 1) {
+          this.crawler.stop();
+          resolve(this.warnings);
+        }
       });
     }) as Promise<Warning[]>;
   }
