@@ -24,9 +24,6 @@ commander.parse(process.argv);
 
   for (const warning of warnings) {
     console.info(warning.url);
-    console.info(warning.pluginName);
-    console.info(warning.message);
-    console.info(warning.line);
-    console.info(warning.column);
+    console.info(`${warning.line}:${warning.column} error (${warning.pluginName}) ${warning.message}`);
   }
 })();
