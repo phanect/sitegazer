@@ -6,7 +6,7 @@ export default class {
 
   start() {
     const app = express();
-    const port: number = 3456;
+    const port = 3456;
 
     app.get("/", (req, res) => {
       res.send(`
