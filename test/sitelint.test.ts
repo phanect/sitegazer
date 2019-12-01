@@ -52,6 +52,17 @@ test("SiteLint crawl the URLs in the page when crawl: true is given", async () =
       column: 24,
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
+    // TODO Follwing warning should be removed in the future:
+    // http://localhost:3456 and http://localhost:3456/ are both analyzed
+    // although they are the same page.
+    // @see https://github.com/brendonboshell/supercrawler/pull/37
+    {
+      column: 24,
+      line: 3,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+      pluginName: "Nu HTML Checker",
+      url: "http://localhost:3456/",
+    },
   ]);
 
   server.close();
