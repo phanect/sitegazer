@@ -1,5 +1,7 @@
 "use strict";
 
+const { join } = require("path");
+
 module.exports = {
   extends: "plugin:@phanect/ts",
 
@@ -8,7 +10,7 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    project: "./tsconfig.json",
+    project: join(__dirname, "./tsconfig.json"),
   },
   plugins: [ "@phanect" ],
 
