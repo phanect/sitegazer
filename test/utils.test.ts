@@ -2,7 +2,7 @@
 
 import { deduplicate } from "../src/utils";
 
-test("deduplicate", async () => {
+test("deduplicate", () => {
   const deduplicated = deduplicate([
     "www.example.com",
     "www.example.org",
