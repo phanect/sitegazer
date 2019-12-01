@@ -66,7 +66,7 @@ test("SiteLint crawl the URLs in the page when crawl: true is given", async () =
   ]);
 
   server.close();
-}, 10000);
+}, 30000);
 
 test("SiteLint returns an error if specified host doesn't respond.", async () => {
   const sitelint = new SiteLint({

@@ -73,4 +73,4 @@ test("Nu HTML Checker Plugin", async () => {
   ]);
 
   server.close();
-}, 10000);
+}, 20000);
