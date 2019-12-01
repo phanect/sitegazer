@@ -4,7 +4,7 @@ import express = require("express");
 export default class {
   private server: Server;
 
-  start() {
+  start(): void {
     const app = express();
     const port = 3456;
 
@@ -57,7 +57,7 @@ export default class {
     this.server = app.listen(port, () => {});
   }
 
-  close() {
+  close(): void {
     this.server.close();
   }
 }
