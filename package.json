@@ -21,7 +21,7 @@
     "@hint/connector-local": "^3.0.2",
     "@hint/connector-puppeteer": "^2.0.0",
     "hint": "^5.0.1",
-    "supercrawler": "^1.7.0",
+    "supercrawler": "^2.0.0",
     "vnu": "19.9.4"
   },
   "devDependencies": {
