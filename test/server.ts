@@ -54,7 +54,7 @@ export default class {
       `);
     });
 
-    this.server = app.listen(port, () => {});
+    this.server = app.listen(port);
   }
 
   close(): void {
