@@ -1,5 +1,6 @@
 "use strict";
 
+import "jest-extended";
 import SiteLint from "../src/sitelint";
 import Server from "./server";
 
@@ -17,7 +18,7 @@ test("Nu HTML Checker Plugin", async () => {
   });
   const results = await sitelint.run();
 
-  expect(results).toEqual([
+  expect(results).toIncludeSameMembers([
     {
       url: "http://localhost:3456",
       pluginName: "Nu HTML Checker",

@@ -1,3 +1,4 @@
+import "jest-extended";
 import SiteLint from "../src/sitelint";
 import Server from "./server";
 
@@ -16,7 +17,7 @@ test("SiteLint crawl the URLs in the page when crawl: true is given", async () =
   });
   const results = await sitelint.run();
 
-  expect(results).toEqual([
+  expect(results).toIncludeSameMembers([
     {
       url: "http://localhost:3456",
       pluginName: "Nu HTML Checker",
