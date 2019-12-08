@@ -14,6 +14,9 @@ export default class {
         <html>
           <head>
             <title>test</title>
+            <script>
+              throw new Error("Something is wrong.");
+            </script>
           </head>
           <body>
             <a href="/link1">link 1</a>
