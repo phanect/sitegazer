@@ -4,7 +4,8 @@ SiteLint crawls all of your pages and find errors from the crawled pages.
 
 ## Requirement
 
-Node.js 10+
+- Node.js 10+
+- Java 8+ (if you want to run `nu` plugin)
 
 ## Install
 
@@ -28,8 +29,15 @@ module.exports = {
   ],
   sitemap: true,
   crawl: true,
-  plugins: [ "nu" ],
+  plugins: [ "nu", "chrome-console" ],
 };
+```
+
+2. Start SiteLint
+
+```shell
+$ cd /path/to/directory # Move to the directory which .sitelintrc exists
+$ sitelint
 ```
 
 ## .sitelintrc.js reference
@@ -45,7 +53,7 @@ module.exports = {
   ],
   sitemap: false,
   crawl: false,
-  plugins: [ "webhint", "nu" ],
+  plugins: [ "nu", "chrome-console" ],
   userAgents: {
     desktop: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
     mobile: "Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Mobile Safari/537.36"
@@ -89,6 +97,7 @@ Linter plugins.
 Currently SiteLint Supports following plugins:
 
 - `nu` ([Nu HTML Checker](https://validator.github.io/validator/))
+- `chrome-console` (List errors detected on Console of Chrome Developer Tools)
 - `webhint` ([WebHint](https://webhint.io/))
 
 ### userAgents
