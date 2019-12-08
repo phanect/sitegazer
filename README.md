@@ -33,6 +33,13 @@ module.exports = {
 };
 ```
 
+2. Start SiteLint
+
+```shell
+$ cd /path/to/directory # Move to the directory which .sitelintrc exists
+$ sitelint
+```
+
 ## .sitelintrc.js reference
 
 ```js
