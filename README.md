@@ -4,7 +4,8 @@ SiteLint crawls all of your pages and find errors from the crawled pages.
 
 ## Requirement
 
-Node.js 10+
+- Node.js 10+
+- Java 8+ (if you want to run `nu` plugin)
 
 ## Install
 
