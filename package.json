@@ -14,7 +14,7 @@
     "build": "tsc",
     "lint": "eslint --ext=.js,.jsx,.ts,.tsx .",
     "release": "yarn publish --access public --non-interactive",
-    "test": "jest --verbose"
+    "test": "jest --runInBand --verbose"
   },
   "dependencies": {
     "@hint/connector-jsdom": "^4.0.2",
