@@ -23,11 +23,11 @@ class SiteGazer {
 
     this.plugins = this.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
 
-    this.initCrawler();
+    this.crawler = this.initCrawler();
   }
 
-  private initCrawler(): void {
-    this.crawler = new Crawler({
+  private initCrawler(): Crawler {
+    const crawler = new Crawler({
       interval: 2000,
       concurrentRequestsLimit: 1,
       robotsEnabled: false,
@@ -36,14 +36,14 @@ class SiteGazer {
     });
 
     if (this.config.sitemap !== false) {
-      this.crawler.addHandler(handlers.sitemapsParser());
+      crawler.addHandler(handlers.sitemapsParser());
     }
 
-    this.crawler.addHandler("text/html", handlers.htmlLinkParser({
+    crawler.addHandler("text/html", handlers.htmlLinkParser({
       hostnames: deduplicate(this.config.urls).map(url => new URL(url).hostname),
     }));
 
-    this.crawler.on("crawledurl", (url: string, errorCode: string, statusCode: number) => {
+    crawler.on("crawledurl", (url: string, errorCode: string, statusCode: number) => {
       console.info("Processed ", url);
       this.proccessingURLcount++;
 
@@ -82,6 +82,8 @@ class SiteGazer {
         this.proccessingURLcount--;
       })();
     });
+
+    return crawler;
   }
 
   public async run(): Promise<Warning[]> {
