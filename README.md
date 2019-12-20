@@ -10,8 +10,15 @@ SiteLint crawls all of your pages and find errors from the crawled pages.
 ## Install
 
 ```shell
+$ yarn global add @phanect/sitelint
+```
+
+```shell
 $ npm install -g @phanect/sitelint
 ```
+
+If you want to install with `sudo` on Linux systems, yarn is recommended way to install.
+Unfortunately, `sudo npm install -g @phanect/sitelint` may fail to install due to permission issue.
 
 ## Usage
 
