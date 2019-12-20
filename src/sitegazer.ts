@@ -23,6 +23,10 @@ class SiteGazer {
 
     this.plugins = this.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
 
+    this.initCrawler();
+  }
+
+  private initCrawler(): void {
     this.crawler = new Crawler({
       interval: 2000,
       concurrentRequestsLimit: 1,
