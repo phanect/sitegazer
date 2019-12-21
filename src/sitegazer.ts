@@ -11,7 +11,7 @@ const defaultUAS = {
 };
 
 class SiteGazer {
-  private crawler: Crawler;
+  private crawlers: Crawler[] = [];
   private warnings: Warning[] = [];
   private plugins: Plugin[];
   private config: Config;
@@ -23,16 +23,18 @@ class SiteGazer {
 
     this.plugins = this.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
 
-    this.crawler = this.initCrawler();
+    for (const [ deviceType, userAgent ] of Object.entries(this.config.userAgents || defaultUAS)) {
+      this.crawlers.push(this.initCrawler({ deviceType, userAgent }));
+    }
   }
 
-  private initCrawler(): Crawler {
+  private initCrawler({ deviceType, userAgent }: { deviceType: string; userAgent: string }): Crawler {
     const crawler = new Crawler({
       interval: 2000,
       concurrentRequestsLimit: 1,
       robotsEnabled: false,
       robotsCacheTime: 3600000,
-      userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
+      userAgent: userAgent,
     });
 
     if (this.config.sitemap !== false) {
@@ -87,22 +89,28 @@ class SiteGazer {
   }
 
   public async run(): Promise<Warning[]> {
-    const urlList = this.crawler.getUrlList();
+    for (const crawler of this.crawlers) {
+      const urlList = crawler.getUrlList();
 
-    await Promise.all(
-      this.config.urls.map(url => urlList.insertIfNotExists(new Url(url)))
-    );
+      await Promise.all(
+        this.config.urls.map(url => urlList.insertIfNotExists(new Url(url)))
+      );
 
-    this.crawler.start();
+      this.proccessingURLcount = 0; // Ensure proccessingURLcount is 0
 
-    return new Promise((resolve) => {
-      this.crawler.on("urllistcomplete", () => {
-        if (this.proccessingURLcount < 1) {
-          this.crawler.stop();
-          resolve(this.warnings);
-        }
+      crawler.start();
+
+      await new Promise((resolve) => {
+        crawler.on("urllistcomplete", () => {
+          if (this.proccessingURLcount < 1) {
+            crawler.stop();
+            resolve();
+          }
+        });
       });
-    }) as Promise<Warning[]>;
+    }
+
+    return this.warnings;
   }
 }
 
