@@ -80,4 +80,4 @@ test("Nu HTML Checker Plugin", async () => {
       url: "http://localhost:3456/",
     },
   ]));
-}, 20000);
+}, 30000);
