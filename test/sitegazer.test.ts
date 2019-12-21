@@ -5,10 +5,18 @@ import Server from "./server";
 const url = "http://localhost:3456";
 const inexistentURL = "http://localhost:7171";
 
-test("SiteGazer crawl the URLs in the page when crawl: true is given", async () => {
-  const server = new Server();
-  server.start();
+let server: Server;
 
+beforeEach(() => {
+  server = new Server();
+  server.start();
+});
+
+afterEach(() => {
+  server.close();
+});
+
+test("SiteGazer crawl the URLs in the page when crawl: true is given", async () => {
   const sitegazer = new SiteGazer({
     urls: [ url ],
     sitemap: false,
@@ -65,8 +73,6 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       url: "http://localhost:3456/",
     },
   ]);
-
-  server.close();
 }, 30000);
 
 test("SiteGazer returns an error if specified host doesn't respond.", async () => {

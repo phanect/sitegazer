@@ -6,10 +6,18 @@ import Server from "./server";
 
 const url = "http://localhost:3456";
 
-test("Nu HTML Checker Plugin", async () => {
-  const server = new Server();
-  server.start();
+let server: Server;
 
+beforeEach(() => {
+  server = new Server();
+  server.start();
+});
+
+afterEach(() => {
+  server.close();
+});
+
+test("Nu HTML Checker Plugin", async () => {
   const sitegazer = new SiteGazer({
     urls: [ url ],
     sitemap: false,
@@ -72,6 +80,4 @@ test("Nu HTML Checker Plugin", async () => {
       url: "http://localhost:3456/",
     },
   ]);
-
-  server.close();
 }, 20000);
