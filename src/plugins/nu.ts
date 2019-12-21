@@ -16,6 +16,7 @@ export default (async (context: Context): Promise<Warning[]> => {
 
   return warnings.map(warning => ({
     url: warning.url,
+    deviceType: context.deviceType,
     pluginName: "Nu HTML Checker",
     message: warning.message,
     line: warning.lastLine,

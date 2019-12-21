@@ -32,6 +32,7 @@ export default (async (context: Context): Promise<Warning[]> => {
 
   return errors.map(error => ({
     url: pageURL,
+    deviceType: context.deviceType,
     pluginName: "Chrome Console",
     message: error.toString(),
     line: 0,

@@ -23,7 +23,7 @@ commander.parse(process.argv);
   const warnings = await sitegazer.run();
 
   for (const warning of warnings) {
-    console.info(warning.url);
+    console.info(`warning.url (${warning.deviceType})`);
     console.info(`${warning.line}:${warning.column} error (${warning.pluginName}) ${warning.message}`);
   }
 })();

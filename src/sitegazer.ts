@@ -53,6 +53,7 @@ class SiteGazer {
         if (errorCode === "REQUEST_ERROR") {
           this.warnings.push({
             url,
+            deviceType,
             pluginName: null,
             message: `Error: Request failure for ${url}. `
               + (statusCode ? `HTTP Status Code is ${statusCode}` : "Server doesn't respond."),
@@ -62,6 +63,7 @@ class SiteGazer {
         } else {
           this.warnings.push({
             url,
+            deviceType,
             pluginName: null,
             message: `Error: Unexpected error on downloading ${url}. Error code is ${errorCode}. `
               + (statusCode ? `HTTP Status Code is ${statusCode}` : "No status code was given."),
