@@ -5,6 +5,6 @@ export default interface Config {
   sitemap: boolean;
   crawl: boolean;
   plugins: string[];
-  userAgents?: object[];
+  userAgents?: object;
   config?: any;
 }
