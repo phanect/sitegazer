@@ -1,8 +1,8 @@
 "use strict";
 
-import "jest-extended";
 import SiteGazer from "../src/sitegazer";
 import Server from "./server";
+import { sortObjects } from "./testutils";
 
 const url = "http://localhost:3456";
 
@@ -26,7 +26,7 @@ test("Nu HTML Checker Plugin", async () => {
   });
   const results = await sitegazer.run();
 
-  expect(results).toIncludeSameMembers([
+  expect(sortObjects(results)).toEqual(sortObjects([
     {
       url: "http://localhost:3456",
       pluginName: "Nu HTML Checker",
@@ -79,5 +79,5 @@ test("Nu HTML Checker Plugin", async () => {
       pluginName: "Nu HTML Checker",
       url: "http://localhost:3456/",
     },
-  ]);
+  ]));
 }, 20000);

@@ -1,6 +1,6 @@
-import "jest-extended";
 import SiteGazer from "../src/sitegazer";
 import Server from "./server";
+import { sortObjects } from "./testutils";
 
 const url = "http://localhost:3456";
 const inexistentURL = "http://localhost:7171";
@@ -25,7 +25,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
   });
   const results = await sitegazer.run();
 
-  expect(results).toIncludeSameMembers([
+  expect(sortObjects(results)).toEqual(sortObjects([
     {
       url: "http://localhost:3456",
       pluginName: "Nu HTML Checker",
@@ -72,7 +72,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       pluginName: "Nu HTML Checker",
       url: "http://localhost:3456/",
     },
-  ]);
+  ]));
 }, 30000);
 
 test("SiteGazer returns an error if specified host doesn't respond.", async () => {
