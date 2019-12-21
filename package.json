@@ -10,13 +10,13 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/phanect/sitelint.git"
+    "url": "git+https://github.com/phanect/sitegazer.git"
   },
   "bugs": {
-    "url": "https://github.com/phanect/sitelint/issues"
+    "url": "https://github.com/phanect/sitegazer/issues"
   },
-  "homepage": "https://github.com/phanect/sitelint#readme",
   "main": "dist/sitelint.js",
+  "homepage": "https://github.com/phanect/sitegazer#readme",
   "bin": {
     "sitelint": "./dist/cli.js"
   },
