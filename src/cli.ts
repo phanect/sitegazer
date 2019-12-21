@@ -1,6 +1,6 @@
 import commander = require("commander");
 import { join } from "path";
-import SiteLint from "./sitelint";
+import SiteLint from "./sitegazer";
 
 commander
   .version("0.1.0")

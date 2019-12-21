@@ -1,7 +1,7 @@
 "use strict";
 
 import "jest-extended";
-import SiteLint from "../src/sitelint";
+import SiteLint from "../src/sitegazer";
 import Server from "./server";
 
 const url = "http://localhost:3456";

@@ -15,8 +15,8 @@
   "bugs": {
     "url": "https://github.com/phanect/sitegazer/issues"
   },
-  "main": "dist/sitelint.js",
   "homepage": "https://github.com/phanect/sitegazer#readme",
+  "main": "dist/sitegazer.js",
   "bin": {
     "sitelint": "./dist/cli.js"
   },
