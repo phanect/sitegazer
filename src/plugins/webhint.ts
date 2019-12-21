@@ -31,6 +31,7 @@ export default (async (context: Context): Promise<Warning[]> => {
     for (const problem of result.problems) {
       warnings.push({
         url: result.url,
+        deviceType: context.deviceType,
         pluginName: "WebHint",
         message: problem.message,
         line: 0,

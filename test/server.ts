@@ -9,21 +9,41 @@ export default class {
     const port = 3456;
 
     app.get("/", (req, res) => {
-      res.send(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>test</title>
-            <script>
-              throw new Error("Something is wrong.");
-            </script>
-          </head>
-          <body>
-            <a href="/link1">link 1</a>
-            <a href="/link2">link 2</a>
-          </body>
-        </html>
-      `);
+      // if mobile user agent is sent
+      if (req.get("User-Agent").match(/(?:phone|windows\s+phone|ipod|blackberry|(?:android|bb\d+|meego|silk|googlebot) .+? mobile|palm|windows\s+ce|opera\ mini|avantgo|mobilesafari|docomo)/i)) {
+        res.send(`
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <title>test</title>
+              <meta name="viewport" content="width=device-width, target-densityDpi=device-dpi, user-scalable=no">
+              <script>
+                throw new Error("Something is wrong in mobile site.");
+              </script>
+            </head>
+            <body>
+              <a href="/link1">link 1</a>
+              <a href="/link2">link 2</a>
+            </body>
+          </html>
+        `);
+      } else { // if desktop user agent is sent
+        res.send(`
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <title>test</title>
+              <script>
+                throw new Error("Something is wrong in desktop site.");
+              </script>
+            </head>
+            <body>
+              <a href="/link1">link 1</a>
+              <a href="/link2">link 2</a>
+            </body>
+          </html>
+        `);
+      }
     });
 
     app.get("/link1", (req, res) => {

@@ -21,6 +21,7 @@ export default (async (context: Context): Promise<Warning[]> => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
+  page.setUserAgent(context.userAgent);
   page.on("pageerror", onError);
   page.on("error", onError);
 
@@ -32,6 +33,7 @@ export default (async (context: Context): Promise<Warning[]> => {
 
   return errors.map(error => ({
     url: pageURL,
+    deviceType: context.deviceType,
     pluginName: "Chrome Console",
     message: error.toString(),
     line: 0,

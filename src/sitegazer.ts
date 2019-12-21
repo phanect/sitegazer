@@ -11,7 +11,7 @@ const defaultUAS = {
 };
 
 class SiteGazer {
-  private crawler: Crawler;
+  private crawlers: Crawler[] = [];
   private warnings: Warning[] = [];
   private plugins: Plugin[];
   private config: Config;
@@ -23,23 +23,29 @@ class SiteGazer {
 
     this.plugins = this.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
 
-    this.crawler = new Crawler({
+    for (const [ deviceType, userAgent ] of Object.entries(this.config.userAgents || defaultUAS)) {
+      this.crawlers.push(this.initCrawler({ deviceType, userAgent }));
+    }
+  }
+
+  private initCrawler({ deviceType, userAgent }: { deviceType: string; userAgent: string }): Crawler {
+    const crawler = new Crawler({
       interval: 2000,
       concurrentRequestsLimit: 1,
       robotsEnabled: false,
       robotsCacheTime: 3600000,
-      userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0",
+      userAgent: userAgent,
     });
 
     if (this.config.sitemap !== false) {
-      this.crawler.addHandler(handlers.sitemapsParser());
+      crawler.addHandler(handlers.sitemapsParser());
     }
 
-    this.crawler.addHandler("text/html", handlers.htmlLinkParser({
+    crawler.addHandler("text/html", handlers.htmlLinkParser({
       hostnames: deduplicate(this.config.urls).map(url => new URL(url).hostname),
     }));
 
-    this.crawler.on("crawledurl", (url: string, errorCode: string, statusCode: number) => {
+    crawler.on("crawledurl", (url: string, errorCode: string, statusCode: number) => {
       console.info("Processed ", url);
       this.proccessingURLcount++;
 
@@ -47,6 +53,7 @@ class SiteGazer {
         if (errorCode === "REQUEST_ERROR") {
           this.warnings.push({
             url,
+            deviceType,
             pluginName: null,
             message: `Error: Request failure for ${url}. `
               + (statusCode ? `HTTP Status Code is ${statusCode}` : "Server doesn't respond."),
@@ -56,6 +63,7 @@ class SiteGazer {
         } else {
           this.warnings.push({
             url,
+            deviceType,
             pluginName: null,
             message: `Error: Unexpected error on downloading ${url}. Error code is ${errorCode}. `
               + (statusCode ? `HTTP Status Code is ${statusCode}` : "No status code was given."),
@@ -69,7 +77,8 @@ class SiteGazer {
         for (const plugin of this.plugins) {
           const warnings = await plugin({
             url: url,
-            userAgents: this.config.userAgents || [ defaultUAS ],
+            deviceType,
+            userAgent,
           });
 
           this.warnings = this.warnings.concat(warnings);
@@ -78,25 +87,33 @@ class SiteGazer {
         this.proccessingURLcount--;
       })();
     });
+
+    return crawler;
   }
 
   public async run(): Promise<Warning[]> {
-    const urlList = this.crawler.getUrlList();
+    for (const crawler of this.crawlers) {
+      const urlList = crawler.getUrlList();
 
-    await Promise.all(
-      this.config.urls.map(url => urlList.insertIfNotExists(new Url(url)))
-    );
+      await Promise.all(
+        this.config.urls.map(url => urlList.insertIfNotExists(new Url(url)))
+      );
 
-    this.crawler.start();
+      this.proccessingURLcount = 0; // Ensure proccessingURLcount is 0
 
-    return new Promise((resolve) => {
-      this.crawler.on("urllistcomplete", () => {
-        if (this.proccessingURLcount < 1) {
-          this.crawler.stop();
-          resolve(this.warnings);
-        }
+      crawler.start();
+
+      await new Promise((resolve) => {
+        crawler.on("urllistcomplete", () => {
+          if (this.proccessingURLcount < 1) {
+            crawler.stop();
+            resolve();
+          }
+        });
       });
-    }) as Promise<Warning[]>;
+    }
+
+    return this.warnings;
   }
 }
 

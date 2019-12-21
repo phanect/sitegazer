@@ -12,10 +12,11 @@ import Warning from "../interfaces/Warning";
  * @returns {Promise<Warning[]>} The promise object of array of Warning.
  */
 export default (async (context: Context): Promise<Warning[]> => {
-  const warnings = await vnu(context.url);
+  const warnings = await vnu(context.url, { "user-agent": context.userAgent });
 
   return warnings.map(warning => ({
     url: warning.url,
+    deviceType: context.deviceType,
     pluginName: "Nu HTML Checker",
     message: warning.message,
     line: warning.lastLine,
