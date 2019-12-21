@@ -2,5 +2,6 @@
 
 export default interface Context {
   url: string;
-  userAgents: object[];
+  deviceType: string;
+  userAgent: string;
 }

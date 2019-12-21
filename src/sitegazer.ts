@@ -75,7 +75,8 @@ class SiteGazer {
         for (const plugin of this.plugins) {
           const warnings = await plugin({
             url: url,
-            userAgents: this.config.userAgents || [ defaultUAS ],
+            deviceType,
+            userAgent,
           });
 
           this.warnings = this.warnings.concat(warnings);
