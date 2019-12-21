@@ -1,6 +1,6 @@
 import commander = require("commander");
 import { join } from "path";
-import SiteLint from "./sitelint";
+import SiteGazer from "./sitegazer";
 
 commander
   .version("0.1.0")
@@ -12,15 +12,15 @@ commander.parse(process.argv);
 (async () => {
   const config = require(commander.config ?
     commander.config :
-    join(process.cwd(), ".sitelintrc.js")
+    join(process.cwd(), "sitegazer.config.js")
   );
 
   if (commander.url) {
     config.urls.push(commander.url);
   }
 
-  const sitelint = new SiteLint(config);
-  const warnings = await sitelint.run();
+  const sitegazer = new SiteGazer(config);
+  const warnings = await sitegazer.run();
 
   for (const warning of warnings) {
     console.info(warning.url);

@@ -10,7 +10,7 @@ const defaultUAS = {
   mobile: "Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Mobile Safari/537.36",
 };
 
-class SiteLint {
+class SiteGazer {
   private crawler: Crawler;
   private warnings: Warning[] = [];
   private plugins: Plugin[];
@@ -100,4 +100,4 @@ class SiteLint {
   }
 }
 
-export default SiteLint;
+export default SiteGazer;

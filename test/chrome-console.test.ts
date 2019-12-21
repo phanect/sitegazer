@@ -1,7 +1,7 @@
 "use strict";
 
 import "jest-extended";
-import SiteLint from "../src/sitelint";
+import SiteGazer from "../src/sitegazer";
 import Server from "./server";
 
 const url = "http://localhost:3456/";
@@ -10,13 +10,13 @@ test("Chrome Console Plugin", async () => {
   const server = new Server();
   server.start();
 
-  const sitelint = new SiteLint({
+  const sitegazer = new SiteGazer({
     urls: [ url ],
     sitemap: false,
     crawl: false,
     plugins: [ "chrome-console" ],
   });
-  const results = await sitelint.run();
+  const results = await sitegazer.run();
 
   expect(results).toIncludeSameMembers([
     {

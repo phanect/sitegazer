@@ -8,7 +8,7 @@ import Warning from "../interfaces/Warning";
 /**
  * Lint with Nu HTML Checker.
  *
- * @param {Context} context - The context object passed from SiteLint.
+ * @param {Context} context - The context object passed from SiteGazer.
  * @returns {Promise<Warning[]>} The promise object of array of Warning.
  */
 export default (async (context: Context): Promise<Warning[]> => {

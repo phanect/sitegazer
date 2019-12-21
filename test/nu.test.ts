@@ -1,7 +1,7 @@
 "use strict";
 
 import "jest-extended";
-import SiteLint from "../src/sitelint";
+import SiteGazer from "../src/sitegazer";
 import Server from "./server";
 
 const url = "http://localhost:3456";
@@ -10,13 +10,13 @@ test("Nu HTML Checker Plugin", async () => {
   const server = new Server();
   server.start();
 
-  const sitelint = new SiteLint({
+  const sitegazer = new SiteGazer({
     urls: [ url ],
     sitemap: false,
     crawl: false,
     plugins: [ "nu" ],
   });
-  const results = await sitelint.run();
+  const results = await sitegazer.run();
 
   expect(results).toIncludeSameMembers([
     {
@@ -27,7 +27,7 @@ test("Nu HTML Checker Plugin", async () => {
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     // TODO following warnings should not occur when crawl: false.
-    // However, since crawl: false is not working for now, SiteLint crawls and analyze
+    // However, since crawl: false is not working for now, SiteGazer crawls and analyze
     // linked pages and warns the error in those pages.
     // ▼▼
     {
