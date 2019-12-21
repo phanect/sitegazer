@@ -3,7 +3,7 @@ import { Crawler, handlers, Url } from "supercrawler";
 import Config from "./interfaces/Config";
 import Plugin from "./interfaces/Plugin";
 import Warning from "./interfaces/Warning";
-import { deduplicate } from "./utils";
+import { deduplicate, sleep } from "./utils";
 
 const defaultUAS = {
   desktop: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
@@ -23,8 +23,10 @@ class SiteGazer {
 
     this.plugins = this.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
 
-    for (const [ deviceType, userAgent ] of Object.entries(this.config.userAgents || defaultUAS)) {
-      this.crawlers.push(this.initCrawler({ deviceType, userAgent }));
+    if (config.crawl !== false) { // config.crawl === true or unset
+      for (const [ deviceType, userAgent ] of Object.entries(this.config.userAgents || defaultUAS)) {
+        this.crawlers.push(this.initCrawler({ deviceType, userAgent }));
+      }
     }
   }
 
@@ -94,25 +96,34 @@ class SiteGazer {
   }
 
   public async run(): Promise<Warning[]> {
-    for (const crawler of this.crawlers) {
-      const urlList = crawler.getUrlList();
+    if (this.config.crawl !== false) { // this.config.crawl === true or unset
+      for (const crawler of this.crawlers) {
+        const urlList = crawler.getUrlList();
 
-      await Promise.all(
-        this.config.urls.map(url => urlList.insertIfNotExists(new Url(url)))
-      );
+        await Promise.all(
+          this.config.urls.map(url => urlList.insertIfNotExists(new Url(url)))
+        );
 
-      this.proccessingURLcount = 0; // Ensure proccessingURLcount is 0
+        this.proccessingURLcount = 0; // Ensure proccessingURLcount is 0
 
-      crawler.start();
+        crawler.start();
 
-      await new Promise((resolve) => {
-        crawler.on("urllistcomplete", () => {
-          if (this.proccessingURLcount < 1) {
-            crawler.stop();
-            resolve();
-          }
+        await new Promise((resolve) => {
+          crawler.on("urllistcomplete", () => {
+            if (this.proccessingURLcount < 1) {
+              crawler.stop();
+              resolve();
+            }
+          });
         });
-      });
+      }
+    } else { // this.config.crawl === false
+      for (const url of this.config.urls) {
+        for (const [ deviceType, userAgent ] of Object.entries(this.config.userAgents || defaultUAS)) {
+          await this.processURL(url, deviceType, userAgent);
+          await sleep(2000);
+        }
+      }
     }
 
     return this.warnings;
