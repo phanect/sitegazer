@@ -44,7 +44,7 @@ module.exports = {
 
 ```shell
 $ cd /path/to/directory # Move to the directory which sitegazer.config.js exists
-$ sitelint
+$ sitegazer
 ```
 
 ## sitegazer.config.js reference

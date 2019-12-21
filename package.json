@@ -18,7 +18,7 @@
   "homepage": "https://github.com/phanect/sitegazer#readme",
   "main": "dist/sitegazer.js",
   "bin": {
-    "sitelint": "./dist/cli.js"
+    "sitegazer": "./dist/cli.js"
   },
   "scripts": {
     "start": "ts-node ./src/cli.ts",
