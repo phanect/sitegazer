@@ -46,9 +46,6 @@ class SiteGazer {
     }));
 
     crawler.on("crawledurl", (url: string, errorCode: string, statusCode: number) => {
-      console.info("Processed ", url);
-      this.proccessingURLcount++;
-
       if (errorCode) {
         if (errorCode === "REQUEST_ERROR") {
           this.warnings.push({
@@ -73,22 +70,27 @@ class SiteGazer {
         }
       }
 
-      (async () => {
-        for (const plugin of this.plugins) {
-          const warnings = await plugin({
-            url: url,
-            deviceType,
-            userAgent,
-          });
-
-          this.warnings = this.warnings.concat(warnings);
-        }
-
-        this.proccessingURLcount--;
-      })();
+      this.processURL(url, deviceType, userAgent); // Note: this is async method
     });
 
     return crawler;
+  }
+
+  private async processURL(url: string, deviceType: string, userAgent: string): Promise<void> {
+    console.info("Processed ", url);
+    this.proccessingURLcount++;
+
+    for (const plugin of this.plugins) {
+      const warnings = await plugin({
+        url: url,
+        deviceType,
+        userAgent,
+      });
+
+      this.warnings = this.warnings.concat(warnings);
+    }
+
+    this.proccessingURLcount--;
   }
 
   public async run(): Promise<Warning[]> {
