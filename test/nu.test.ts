@@ -27,7 +27,7 @@ test("Nu HTML Checker Plugin", async () => {
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     // TODO following warnings should not occur when crawl: false.
-    // However, since crawl: false is not working for now, SiteLint crawls and analyze
+    // However, since crawl: false is not working for now, SiteGazer crawls and analyze
     // linked pages and warns the error in those pages.
     // ▼▼
     {

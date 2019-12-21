@@ -5,7 +5,7 @@ import Server from "./server";
 const url = "http://localhost:3456";
 const inexistentURL = "http://localhost:7171";
 
-test("SiteLint crawl the URLs in the page when crawl: true is given", async () => {
+test("SiteGazer crawl the URLs in the page when crawl: true is given", async () => {
   const server = new Server();
   server.start();
 
@@ -69,7 +69,7 @@ test("SiteLint crawl the URLs in the page when crawl: true is given", async () =
   server.close();
 }, 30000);
 
-test("SiteLint returns an error if specified host doesn't respond.", async () => {
+test("SiteGazer returns an error if specified host doesn't respond.", async () => {
   const sitegazer = new SiteGazer({
     urls: [
       inexistentURL,

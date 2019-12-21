@@ -1,6 +1,6 @@
-# SiteLint
+# SiteGazer
 
-SiteLint crawls all of your pages and find errors from the crawled pages.
+SiteGazer crawls all of your pages and find errors from the crawled pages.
 
 ## Requirement
 
@@ -40,7 +40,7 @@ module.exports = {
 };
 ```
 
-2. Start SiteLint
+2. Start SiteGazer
 
 ```shell
 $ cd /path/to/directory # Move to the directory which sitegazer.config.js exists
@@ -79,21 +79,21 @@ Type: `string[]`
 Default: `[]`
 
 URLs to lint.
-If `crawl: false` and `sitemap: false`, SiteLint only lint the pages listed in `urls`.
+If `crawl: false` and `sitemap: false`, SiteGazer only lint the pages listed in `urls`.
 
 ### `sitemap`
 
 Type: `boolean`
 Default: `true`
 
-If true, SiteLint lint the URLs listed in sitemap.xml, in addition to URLs listed in `urls`.
+If true, SiteGazer lint the URLs listed in sitemap.xml, in addition to URLs listed in `urls`.
 
 ### `crawl`
 
 Type: `boolean`
 Default: `true`
 
-If true, SiteLint detect `<a>` tags from the linted pages, and lint the detected URLs in addition to URLs listed in `urls`.
+If true, SiteGazer detect `<a>` tags from the linted pages, and lint the detected URLs in addition to URLs listed in `urls`.
 
 ### `plugins`
 
@@ -101,7 +101,7 @@ Type: `string[]`
 Default: `[]`
 
 Linter plugins.
-Currently SiteLint Supports following plugins:
+Currently SiteGazer Supports following plugins:
 
 - `nu` ([Nu HTML Checker](https://validator.github.io/validator/))
 - `chrome-console` (List errors detected on Console of Chrome Developer Tools)
@@ -119,7 +119,7 @@ Default:
 ```
 
 Object of user agent strings.
-If two or more user agent strings are given, SiteLint lint with each user agent strings.
+If two or more user agent strings are given, SiteGazer lint with each user agent strings.
 
 ### `config`
 

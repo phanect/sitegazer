@@ -9,7 +9,7 @@ import Warning from "../interfaces/Warning";
 /**
  * Find browser errors.
  *
- * @param {Context} context - The context object passed from SiteLint.
+ * @param {Context} context - The context object passed from SiteGazer.
  * @returns {Promise<Warning[]>} The promise object of array of Warning.
  */
 export default (async (context: Context): Promise<Warning[]> => {

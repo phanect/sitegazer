@@ -1,7 +1,7 @@
 {
   "name": "sitegazer",
   "version": "0.0.1-alpha2",
-  "description": "SiteLint crawls all of your pages and find errors from the crawled pages",
+  "description": "SiteGazer crawls all of your pages and find errors from the crawled pages",
   "keywords": [
     "linter",
     "crawler"
