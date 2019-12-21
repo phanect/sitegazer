@@ -21,6 +21,7 @@ export default (async (context: Context): Promise<Warning[]> => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
+  page.setUserAgent(context.userAgent);
   page.on("pageerror", onError);
   page.on("error", onError);
 
