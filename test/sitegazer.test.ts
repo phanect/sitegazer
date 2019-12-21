@@ -145,6 +145,43 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
   ]));
 }, 30000);
 
+test("SiteGazer lint only the given URLs when crawl: false is given", async () => {
+  const sitegazer = new SiteGazer({
+    urls: [ url ],
+    sitemap: false,
+    crawl: false,
+    plugins: [ "nu" ],
+  });
+  const results = await sitegazer.run();
+
+  expect(sortObjects(results)).toEqual(sortObjects([
+    {
+      url: "http://localhost:3456",
+      deviceType: "desktop",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 26,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+    {
+      url: "http://localhost:3456",
+      deviceType: "mobile",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 26,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+    {
+      url: "http://localhost:3456",
+      deviceType: "mobile",
+      pluginName: "Nu HTML Checker",
+      line: 6,
+      column: 15,
+      message: "Consider avoiding viewport values that prevent users from resizing documents.",
+    },
+  ]));
+}, 30000);
+
 test("SiteGazer returns an error if specified host doesn't respond.", async () => {
   const sitegazer = new SiteGazer({
     urls: [
