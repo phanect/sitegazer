@@ -22,9 +22,9 @@ Unfortunately, `sudo npm install -g sitegazer` may fail to install due to permis
 
 ## Usage
 
-1. Create .sitelintrc.js
+1. Create sitegazer.config.js
 
-Here's example of .sitelintrc.js. For full reference, see [.sitelintrc.js reference](sitelintrcjs-reference) section
+Here's example of sitegazer.config.js. For full reference, see [sitegazer.config.js reference](#sitegazerconfigjs-reference) section
 
 ```js
 "use strict";
@@ -43,11 +43,11 @@ module.exports = {
 2. Start SiteLint
 
 ```shell
-$ cd /path/to/directory # Move to the directory which .sitelintrc exists
+$ cd /path/to/directory # Move to the directory which sitegazer.config.js exists
 $ sitelint
 ```
 
-## .sitelintrc.js reference
+## sitegazer.config.js reference
 
 ```js
 "use strict";

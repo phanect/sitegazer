@@ -12,7 +12,7 @@ commander.parse(process.argv);
 (async () => {
   const config = require(commander.config ?
     commander.config :
-    join(process.cwd(), ".sitelintrc.js")
+    join(process.cwd(), "sitegazer.config.js")
   );
 
   if (commander.url) {
