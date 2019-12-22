@@ -31,6 +31,7 @@
     "@hint/connector-jsdom": "^4.0.2",
     "@hint/connector-local": "^3.0.2",
     "@hint/connector-puppeteer": "^2.0.0",
+    "commander": "^4.0.1",
     "hint": "^6.0.0",
     "puppeteer": "^2.0.0",
     "supercrawler": "^2.0.0",
