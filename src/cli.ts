@@ -24,6 +24,6 @@ commander.parse(process.argv);
 
   for (const warning of warnings) {
     console.info(`${warning.url} (${warning.deviceType})`);
-    console.info(`${warning.line}:${warning.column} error (${warning.pluginName}) ${warning.message}`);
+    console.info(`${warning.line}:${warning.column} error (${warning.pluginName}) ${warning.message}` + "\n");
   }
 })();
