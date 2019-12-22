@@ -77,7 +77,7 @@ class SiteGazer {
   }
 
   private async processURL(url: string, deviceType: string, userAgent: string): Promise<void> {
-    console.info("Processed ", url);
+    console.info(`Processed ${url} (${deviceType})`);
     this.proccessingURLcount++;
 
     for (const plugin of this.plugins) {
