@@ -1,4 +1,3 @@
-import EventEmitter = require("events");
 import { Crawler, handlers, Url } from "supercrawler";
 import Config from "./interfaces/Config";
 import Plugin from "./interfaces/Plugin";
@@ -16,7 +15,6 @@ class SiteGazer {
   private plugins: Plugin[];
   private config: Config;
   private proccessingURLcount = 0;
-  private emitter = new EventEmitter();
 
   public constructor(config: Config) {
     this.config = config;
