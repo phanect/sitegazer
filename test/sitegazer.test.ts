@@ -27,7 +27,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      url: "http://localhost:3456",
+      url: "http://localhost:3456/",
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -67,7 +67,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456",
+      url: "http://localhost:3456/",
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -75,7 +75,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456",
+      url: "http://localhost:3456/",
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 6,
@@ -113,34 +113,6 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       line: 3,
       column: 24,
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
-    },
-    // TODO Follwing warning should be removed in the future:
-    // http://localhost:3456 and http://localhost:3456/ are both analyzed
-    // although they are the same page.
-    // @see https://github.com/brendonboshell/supercrawler/pull/37
-    {
-      column: 26,
-      line: 3,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
-      deviceType: "desktop",
-      pluginName: "Nu HTML Checker",
-      url: "http://localhost:3456/",
-    },
-    {
-      column: 26,
-      line: 3,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
-      deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      url: "http://localhost:3456/",
-    },
-    {
-      url: "http://localhost:3456/",
-      deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      line: 6,
-      column: 15,
-      message: "Consider avoiding viewport values that prevent users from resizing documents.",
     },
   ]));
 }, 30000);
@@ -156,7 +128,7 @@ test("SiteGazer lint only the given URLs when crawl: false is given", async () =
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      url: "http://localhost:3456",
+      url: "http://localhost:3456/",
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -164,7 +136,7 @@ test("SiteGazer lint only the given URLs when crawl: false is given", async () =
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456",
+      url: "http://localhost:3456/",
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -172,7 +144,7 @@ test("SiteGazer lint only the given URLs when crawl: false is given", async () =
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456",
+      url: "http://localhost:3456/",
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 6,
@@ -195,7 +167,7 @@ test("SiteGazer returns an error if specified host doesn't respond.", async () =
 
   expect(results).toEqual(sortObjects([
     {
-      url: "http://localhost:7171",
+      url: "http://localhost:7171/",
       deviceType: "desktop",
       pluginName: null,
       message: "Error: Connection refused to localhost:7171. (ERR_CONNECTION_REFUSED)",
@@ -203,7 +175,7 @@ test("SiteGazer returns an error if specified host doesn't respond.", async () =
       column: 1,
     },
     {
-      url: "http://localhost:7171",
+      url: "http://localhost:7171/",
       deviceType: "mobile",
       pluginName: null,
       message: "Error: Connection refused to localhost:7171. (ERR_CONNECTION_REFUSED)",
