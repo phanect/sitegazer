@@ -1,84 +1,138 @@
-import { Crawler, handlers, Url } from "supercrawler";
+import * as puppeteer from "puppeteer";
+import Sitemapper from "sitemapper";
+
 import Config from "./interfaces/Config";
 import Plugin from "./interfaces/Plugin";
 import Warning from "./interfaces/Warning";
 import { deduplicate, sleep } from "./utils";
 
-const defaultUAS = {
-  desktop: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
-  mobile: "Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Mobile Safari/537.36",
-};
+const interval = 2000;
 
 class SiteGazer {
-  private crawlers: Crawler[] = [];
   private warnings: Warning[] = [];
   private plugins: Plugin[];
   private config: Config;
-  private proccessingURLcount = 0;
+
+  private urlsToCrawl: string[] = [];
+  private processedURLs: string[] = [];
+
+  private hostsToCrawl: string[] = [];
+
+  private userAgents: object = {
+    desktop: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
+    mobile: "Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Mobile Safari/537.36",
+  };
 
   public constructor(config: Config) {
     this.config = config;
 
     this.plugins = this.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
 
-    if (config.crawl !== false) { // config.crawl === true or unset
-      for (const [ deviceType, userAgent ] of Object.entries(this.config.userAgents || defaultUAS)) {
-        this.crawlers.push(this.initCrawler({ deviceType, userAgent }));
-      }
-    }
+    this.addURLs(config.urls);
   }
 
-  private initCrawler({ deviceType, userAgent }: { deviceType: string; userAgent: string }): Crawler {
-    const crawler = new Crawler({
-      interval: 2000,
-      concurrentRequestsLimit: 1,
-      robotsEnabled: false,
-      robotsCacheTime: 3600000,
-      userAgent: userAgent,
-    });
+  private addURLs(urls: string[]|URL[]): void {
+    let _urls: (string|URL)[];
 
-    if (this.config.sitemap !== false) {
-      crawler.addHandler(handlers.sitemapsParser());
+    if (Array.isArray(urls)) {
+      _urls = urls;
+    } else {
+      _urls = [ urls ];
     }
 
-    crawler.addHandler("text/html", handlers.htmlLinkParser({
-      hostnames: deduplicate(this.config.urls).map(url => new URL(url).hostname),
-    }));
+    const urlStrings: string[] = _urls.map((url: string|URL) =>
+      (typeof url === "string") ? new URL(url).href : url.href);
 
-    crawler.on("crawledurl", (url: string, errorCode: string, statusCode: number) => {
-      if (errorCode) {
-        if (errorCode === "REQUEST_ERROR") {
-          this.warnings.push({
-            url,
-            deviceType,
-            pluginName: null,
-            message: `Error: Request failure for ${url}. `
-              + (statusCode ? `HTTP Status Code is ${statusCode}` : "Server doesn't respond."),
-            line: 1,
-            column: 1,
-          });
-        } else {
-          this.warnings.push({
-            url,
-            deviceType,
-            pluginName: null,
-            message: `Error: Unexpected error on downloading ${url}. Error code is ${errorCode}. `
-              + (statusCode ? `HTTP Status Code is ${statusCode}` : "No status code was given."),
-            line: 1,
-            column: 1,
-          });
+    for (const [ i, url ] of urlStrings.entries()) {
+      if (
+        this.urlsToCrawl.includes(url) ||
+        this.processedURLs.includes(url)
+      ) {
+        urlStrings.splice(0, i + 1);
+      }
+    }
+
+    this.urlsToCrawl = this.urlsToCrawl.concat(urlStrings);
+
+    this.hostsToCrawl = deduplicate(this.urlsToCrawl.map(url => new URL(url).host));
+  }
+
+  private async loadPage(url: string, deviceType: string, userAgent: string): Promise<void> {
+    const errors: Error[] = [];
+    const onError = (err: Error): void => {
+      errors.push(err);
+    };
+
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    page.setUserAgent(userAgent);
+    page.on("pageerror", onError);
+    page.on("error", onError);
+
+    try {
+      const res = await page.goto(url);
+      const pageURL = page.url();
+
+      if (!res.ok()) {
+        this.warnings.push({
+          url: pageURL,
+          deviceType,
+          pluginName: null,
+          message: `Error: Request failure for ${url}. ${res.status()}: ${res.statusText()}`,
+          line: 1,
+          column: 1,
+        });
+      }
+
+      // Parse links & add
+      if (this.config.crawl) {
+        for (const a of await page.$$("a")) {
+          const urlInPage = new URL(await (await a.getProperty("href")).jsonValue() as string);
+
+          if (this.hostsToCrawl.includes(urlInPage.host)) {
+            this.addURLs([ urlInPage ]);
+          }
         }
       }
 
-      this.processURL(url, deviceType, userAgent); // Note: this is async method
-    });
+      await browser.close();
 
-    return crawler;
+      return this.processURL(pageURL, deviceType, userAgent);
+    } catch (err) {
+      if (err.message.startsWith("net::ERR_CONNECTION_REFUSED")) {
+        this.warnings.push({
+          url: url,
+          deviceType,
+          pluginName: null,
+          message: `Error: Connection refused to ${new URL(url).host}. (ERR_CONNECTION_REFUSED)`,
+          line: 1,
+          column: 1,
+        });
+      } else if (err.message.startsWith("net::ERR_SSL_PROTOCOL_ERROR")) {
+        this.warnings.push({
+          url: url,
+          deviceType,
+          pluginName: null,
+          message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
+          line: 1,
+          column: 1,
+        });
+      } else {
+        this.warnings.push({
+          url: url,
+          deviceType,
+          pluginName: null,
+          message: `Error: Unexpected error on browser access: ${err.toString()}`,
+          line: 1,
+          column: 1,
+        });
+      }
+    }
   }
 
   private async processURL(url: string, deviceType: string, userAgent: string): Promise<void> {
     console.info(`Processed ${url} (${deviceType})`);
-    this.proccessingURLcount++;
 
     for (const plugin of this.plugins) {
       const warnings = await plugin({
@@ -89,38 +143,39 @@ class SiteGazer {
 
       this.warnings = this.warnings.concat(warnings);
     }
+  }
 
-    this.proccessingURLcount--;
+  private async parseSiteMap(): Promise<void> {
+    let pages: string[] = [];
+
+    for (const host of this.hostsToCrawl) {
+      const sitemapper = new Sitemapper({
+        url: `http://${host}/sitemap.xml`,
+        timeout: 30000,
+      });
+      const sitemap = await sitemapper.fetch();
+      pages = pages.concat(sitemap.sites);
+    }
+
+    this.addURLs(pages);
   }
 
   public async run(): Promise<Warning[]> {
-    if (this.config.crawl !== false) { // this.config.crawl === true or unset
-      for (const crawler of this.crawlers) {
-        const urlList = crawler.getUrlList();
+    if (this.config.sitemap === true) {
+      this.parseSiteMap();
+    }
 
-        await Promise.all(
-          this.config.urls.map(url => urlList.insertIfNotExists(new Url(url)))
-        );
+    while (true) {
+      const url = this.urlsToCrawl.shift();
+      this.processedURLs.push(url);
 
-        this.proccessingURLcount = 0; // Ensure proccessingURLcount is 0
-
-        crawler.start();
-
-        await new Promise((resolve) => {
-          crawler.on("urllistcomplete", () => {
-            if (this.proccessingURLcount < 1) {
-              crawler.stop();
-              resolve();
-            }
-          });
-        });
+      if (url === undefined) {
+        break;
       }
-    } else { // this.config.crawl === false
-      for (const url of this.config.urls) {
-        for (const [ deviceType, userAgent ] of Object.entries(this.config.userAgents || defaultUAS)) {
-          await this.processURL(url, deviceType, userAgent);
-          await sleep(2000);
-        }
+
+      for (const [ deviceType, userAgent ] of Object.entries(this.userAgents)) {
+        await this.loadPage(url, deviceType, userAgent);
+        await sleep(interval);
       }
     }
 
