@@ -5,4 +5,5 @@ export default interface Context {
   html: string;
   deviceType: string;
   userAgent: string;
+  browserErrors: Error[];
 }
