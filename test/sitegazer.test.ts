@@ -184,3 +184,32 @@ test("SiteGazer returns an error if specified host doesn't respond.", async () =
     },
   ]));
 });
+
+test("SiteGazer returns an error on TLS error.", async () => {
+  const sitegazer = new SiteGazer({
+    urls: [ "https://localhost:3456" ], // https:// access to the server which does not support https
+    sitemap: false,
+    crawl: true,
+    plugins: [],
+  });
+  const results = await sitegazer.run();
+
+  expect(results).toEqual(sortObjects([
+    {
+      url: "https://localhost:3456/",
+      deviceType: "desktop",
+      pluginName: null,
+      message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
+      line: 1,
+      column: 1,
+    },
+    {
+      url: "https://localhost:3456/",
+      deviceType: "mobile",
+      pluginName: null,
+      message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
+      line: 1,
+      column: 1,
+    },
+  ]));
+});
