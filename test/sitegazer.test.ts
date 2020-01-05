@@ -7,13 +7,13 @@ const inexistentURL = "http://localhost:7171";
 
 let server: Server;
 
-beforeEach(() => {
+beforeEach(async () => {
   server = new Server();
-  server.start();
+  await server.start();
 });
 
-afterEach(() => {
-  server.close();
+afterEach(async () => {
+  await server.close();
 });
 
 test("SiteGazer crawl the URLs in the page when crawl: true is given", async () => {

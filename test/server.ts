@@ -4,7 +4,7 @@ import express = require("express");
 export default class {
   private server: Server;
 
-  start(): void {
+  async start(): Promise<void> {
     const app = express();
     const port = 3456;
 
@@ -77,10 +77,18 @@ export default class {
       `);
     });
 
-    this.server = app.listen(port);
+    const self = this;
+
+    return new Promise(resolve => {
+      self.server = app.listen({ port }, () => resolve());
+    });
   }
 
-  close(): void {
-    this.server.close();
+  async close(): Promise<void> {
+    const self = this;
+
+    return new Promise(resolve => {
+      self.server.close(() => resolve());
+    });
   }
 }

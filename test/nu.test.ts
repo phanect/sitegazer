@@ -8,13 +8,13 @@ const url = "http://localhost:3456";
 
 let server: Server;
 
-beforeEach(() => {
+beforeEach(async () => {
   server = new Server();
-  server.start();
+  await server.start();
 });
 
-afterEach(() => {
-  server.close();
+afterEach(async () => {
+  await server.close();
 });
 
 test("Nu HTML Checker Plugin", async () => {
