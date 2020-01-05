@@ -1,9 +1,5 @@
-.github/
 src/
 test/
-types/
-.editorconfig
-.eslintrc.js
 
 #
 # System
@@ -27,9 +23,10 @@ Thumbs.db
 #
 # Tools
 #
+.github/
+.editorconfig
 .gitattributes
 .gitignore
-jest.config.js
 
 #
 # JavaScript
@@ -47,7 +44,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # TypeScript
+types/
 tsconfig.json
 
 # Other Tools
 .eslintignore
+.eslintrc.js
+jest.config.js
