@@ -56,6 +56,7 @@ export default class {
           <body>
             <a href="/">top</a>
             <a href="/link2">link 2</a>
+            <a href="https://example.com/">link to external host (should not be crawled)</a>
           </body>
         </html>
       `);
