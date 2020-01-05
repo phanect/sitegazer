@@ -73,6 +73,7 @@ class SiteGazer {
     try {
       const res = await page.goto(url);
       const pageURL = page.url();
+      const html = await page.content();
 
       if (!res.ok()) {
         this.warnings.push({
@@ -98,7 +99,7 @@ class SiteGazer {
 
       await browser.close();
 
-      return this.processURL(pageURL, deviceType, userAgent);
+      return this.processURL(pageURL, html, deviceType, userAgent);
     } catch (err) {
       if (err.message.startsWith("net::ERR_CONNECTION_REFUSED")) {
         this.warnings.push({
@@ -131,12 +132,13 @@ class SiteGazer {
     }
   }
 
-  private async processURL(url: string, deviceType: string, userAgent: string): Promise<void> {
+  private async processURL(url: string, html: string, deviceType: string, userAgent: string): Promise<void> {
     console.info(`Processed ${url} (${deviceType})`);
 
     for (const plugin of this.plugins) {
       const warnings = await plugin({
         url: url,
+        html,
         deviceType,
         userAgent,
       });
