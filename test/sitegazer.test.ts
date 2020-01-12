@@ -116,7 +116,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
   ]));
-}, 30000);
+}, 50000);
 
 test("SiteGazer lint only the given URLs when crawl: false is given", async () => {
   const sitegazer = new SiteGazer({
@@ -184,7 +184,7 @@ test("SiteGazer returns an error if specified host doesn't respond.", async () =
       column: 1,
     },
   ]));
-});
+}, 30000);
 
 test("SiteGazer returns an error on TLS error.", async () => {
   const sitegazer = new SiteGazer({
