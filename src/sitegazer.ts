@@ -73,7 +73,7 @@ class SiteGazer {
     try {
       const res = await page.goto(url);
       const pageURL = page.url();
-      const html = await page.content();
+      const html = await res.text();
 
       if (!res.ok()) {
         this.warnings.push({
