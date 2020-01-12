@@ -4,12 +4,13 @@ import SiteGazer from "../src/sitegazer";
 import Server from "./server";
 import { sortObjects } from "./testutils";
 
-const url = "http://localhost:3456";
+const port = 2345;
+const url = `http://localhost:${port}`;
 
 let server: Server;
 
 beforeEach(async () => {
-  server = new Server();
+  server = new Server(port);
   await server.start();
 });
 
@@ -28,7 +29,7 @@ test("Nu HTML Checker Plugin", async () => {
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      url: "http://localhost:3456/",
+      url: `http://localhost:${port}/`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -36,7 +37,7 @@ test("Nu HTML Checker Plugin", async () => {
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456/",
+      url: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -45,7 +46,7 @@ test("Nu HTML Checker Plugin", async () => {
     },
     // This error message ensures that mobile user agent is properly working
     {
-      url: "http://localhost:3456/",
+      url: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 6,

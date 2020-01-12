@@ -3,10 +3,15 @@ import express = require("express");
 
 export default class {
   private server: Server;
+  private port: number;
+
+  constructor(port: number) {
+    this.port = port;
+  }
 
   async start(): Promise<void> {
     const app = express();
-    const port = 3456;
+    const port = this.port;
 
     app.get("/", (req, res) => {
       // if mobile user agent is sent
