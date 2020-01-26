@@ -155,6 +155,59 @@ test("SiteGazer lint only the given URLs when crawl: false is given", async () =
   ]));
 }, 30000);
 
+test("SiteGazer lint URLs in sitemap.xml when sitemap: true is given", async () => {
+  const sitegazer = new SiteGazer({
+    urls: [ url ],
+    sitemap: true,
+    crawl: false,
+    plugins: [ "nu" ],
+  });
+  const results = await sitegazer.run();
+
+  expect(sortObjects(results)).toEqual(sortObjects([
+    {
+      url: `http://localhost:${port}/`,
+      deviceType: "desktop",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 26,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+    {
+      url: `http://localhost:${port}/`,
+      deviceType: "mobile",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 26,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+    {
+      url: `http://localhost:${port}/`,
+      deviceType: "mobile",
+      pluginName: "Nu HTML Checker",
+      line: 6,
+      column: 15,
+      message: "Consider avoiding viewport values that prevent users from resizing documents.",
+    },
+    {
+      url: `http://localhost:${port}/sitemapped`,
+      deviceType: "desktop",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 24,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+    {
+      url: `http://localhost:${port}/sitemapped`,
+      deviceType: "mobile",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 24,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+  ]));
+}, 30000);
+
 test("SiteGazer returns an error if specified host doesn't respond.", async () => {
   const sitegazer = new SiteGazer({
     urls: [

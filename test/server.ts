@@ -83,6 +83,33 @@ export default class {
       `);
     });
 
+    app.get("/sitemapped", (req, res) => {
+      res.send(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>A page only on sitemap.xml</title>
+          </head>
+          <body>
+            <span></span>
+          </body>
+        </html>
+      `);
+    });
+
+    app.get("/sitemap.xml", (req, res) => {
+      res.send(`<?xml version="1.0" encoding="UTF-8"?>
+        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+          <url>
+            <loc>http://localhost:${port}/sitemapped</loc>
+            <lastmod>2020-01-01</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+          </url>
+        </urlset>
+      `);
+    });
+
     const self = this;
 
     return new Promise(resolve => {
