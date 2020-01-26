@@ -26,6 +26,17 @@ class SiteGazer {
   public constructor(config: Config) {
     this.config = config;
 
+    if (this.config.urls.length < 1) {
+      this.warnings.push({
+        url: null,
+        deviceType: null,
+        pluginName: null,
+        message: "No URL is given.",
+        line: 1,
+        column: 1,
+      });
+    }
+
     this.plugins = this.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
 
     this.addURLs(config.urls);
