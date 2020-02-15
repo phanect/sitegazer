@@ -1,6 +1,5 @@
 "use strict";
 
-import "jest-extended";
 import { deduplicate } from "../src/utils";
 
 test("deduplicate", () => {
@@ -23,7 +22,7 @@ test("deduplicate", () => {
     "www.example.io",
   ]);
 
-  expect(deduplicated).toIncludeSameMembers([
+  expect(deduplicated).toStrictEqual([
     "www.example.com",
     "www.example.org",
     "www.example.net",

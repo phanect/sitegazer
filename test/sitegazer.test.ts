@@ -2,18 +2,19 @@ import SiteGazer from "../src/sitegazer";
 import Server from "./server";
 import { sortObjects } from "./testutils";
 
-const url = "http://localhost:3456";
+const port = 3456;
+const url = `http://localhost:${port}`;
 const inexistentURL = "http://localhost:7171";
 
 let server: Server;
 
-beforeEach(() => {
-  server = new Server();
-  server.start();
+beforeEach(async () => {
+  server = new Server(port);
+  await server.start();
 });
 
-afterEach(() => {
-  server.close();
+afterEach(async () => {
+  await server.close();
 });
 
 test("SiteGazer crawl the URLs in the page when crawl: true is given", async () => {
@@ -27,7 +28,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      url: "http://localhost:3456",
+      url: `http://localhost:${port}/`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -35,7 +36,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456/link1",
+      url: `http://localhost:${port}/link1`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -43,7 +44,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456/link2",
+      url: `http://localhost:${port}/link2`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 11,
@@ -51,7 +52,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "End tag for  “body” seen, but there were unclosed elements.",
     },
     {
-      url: "http://localhost:3456/link2",
+      url: `http://localhost:${port}/link2`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 10,
@@ -59,7 +60,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Unclosed element “span”.",
     },
     {
-      url: "http://localhost:3456/link2",
+      url: `http://localhost:${port}/link2`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -67,7 +68,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456",
+      url: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -75,7 +76,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456",
+      url: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 6,
@@ -83,7 +84,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Consider avoiding viewport values that prevent users from resizing documents.",
     },
     {
-      url: "http://localhost:3456/link1",
+      url: `http://localhost:${port}/link1`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -91,7 +92,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456/link2",
+      url: `http://localhost:${port}/link2`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 11,
@@ -99,7 +100,7 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "End tag for  “body” seen, but there were unclosed elements.",
     },
     {
-      url: "http://localhost:3456/link2",
+      url: `http://localhost:${port}/link2`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 10,
@@ -107,43 +108,15 @@ test("SiteGazer crawl the URLs in the page when crawl: true is given", async () 
       message: "Unclosed element “span”.",
     },
     {
-      url: "http://localhost:3456/link2",
+      url: `http://localhost:${port}/link2`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
       column: 24,
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
-    },
-    // TODO Follwing warning should be removed in the future:
-    // http://localhost:3456 and http://localhost:3456/ are both analyzed
-    // although they are the same page.
-    // @see https://github.com/brendonboshell/supercrawler/pull/37
-    {
-      column: 26,
-      line: 3,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
-      deviceType: "desktop",
-      pluginName: "Nu HTML Checker",
-      url: "http://localhost:3456/",
-    },
-    {
-      column: 26,
-      line: 3,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
-      deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      url: "http://localhost:3456/",
-    },
-    {
-      url: "http://localhost:3456/",
-      deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      line: 6,
-      column: 15,
-      message: "Consider avoiding viewport values that prevent users from resizing documents.",
     },
   ]));
-}, 30000);
+}, 50000);
 
 test("SiteGazer lint only the given URLs when crawl: false is given", async () => {
   const sitegazer = new SiteGazer({
@@ -156,7 +129,7 @@ test("SiteGazer lint only the given URLs when crawl: false is given", async () =
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      url: "http://localhost:3456",
+      url: `http://localhost:${port}/`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -164,7 +137,7 @@ test("SiteGazer lint only the given URLs when crawl: false is given", async () =
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456",
+      url: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -172,12 +145,86 @@ test("SiteGazer lint only the given URLs when crawl: false is given", async () =
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: "http://localhost:3456",
+      url: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 6,
       column: 15,
       message: "Consider avoiding viewport values that prevent users from resizing documents.",
+    },
+  ]));
+}, 30000);
+
+test("SiteGazer lint URLs in sitemap.xml when sitemap: true is given", async () => {
+  const sitegazer = new SiteGazer({
+    urls: [ url ],
+    sitemap: true,
+    crawl: false,
+    plugins: [ "nu" ],
+  });
+  const results = await sitegazer.run();
+
+  expect(sortObjects(results)).toEqual(sortObjects([
+    {
+      url: `http://localhost:${port}/`,
+      deviceType: "desktop",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 26,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+    {
+      url: `http://localhost:${port}/`,
+      deviceType: "mobile",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 26,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+    {
+      url: `http://localhost:${port}/`,
+      deviceType: "mobile",
+      pluginName: "Nu HTML Checker",
+      line: 6,
+      column: 15,
+      message: "Consider avoiding viewport values that prevent users from resizing documents.",
+    },
+    {
+      url: `http://localhost:${port}/sitemapped`,
+      deviceType: "desktop",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 24,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+    {
+      url: `http://localhost:${port}/sitemapped`,
+      deviceType: "mobile",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 24,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+  ]));
+}, 30000);
+
+test("SiteGazer returns error when no URL is given", async () => {
+  const sitegazer = new SiteGazer({
+    urls: [],
+    sitemap: false,
+    crawl: false,
+    plugins: [ "nu" ],
+  });
+  const results = await sitegazer.run();
+
+  expect(sortObjects(results)).toEqual(sortObjects([
+    {
+      url: null,
+      deviceType: null,
+      pluginName: null,
+      line: 1,
+      column: 1,
+      message: "No URL is given.",
     },
   ]));
 }, 30000);
@@ -195,18 +242,47 @@ test("SiteGazer returns an error if specified host doesn't respond.", async () =
 
   expect(results).toEqual(sortObjects([
     {
-      url: "http://localhost:7171",
+      url: "http://localhost:7171/",
       deviceType: "desktop",
       pluginName: null,
-      message: "Error: Request failure for http://localhost:7171. Server doesn't respond.",
+      message: "Error: Connection refused to localhost:7171. (ERR_CONNECTION_REFUSED)",
       line: 1,
       column: 1,
     },
     {
-      url: "http://localhost:7171",
+      url: "http://localhost:7171/",
       deviceType: "mobile",
       pluginName: null,
-      message: "Error: Request failure for http://localhost:7171. Server doesn't respond.",
+      message: "Error: Connection refused to localhost:7171. (ERR_CONNECTION_REFUSED)",
+      line: 1,
+      column: 1,
+    },
+  ]));
+}, 30000);
+
+test("SiteGazer returns an error on TLS error.", async () => {
+  const sitegazer = new SiteGazer({
+    urls: [ `https://localhost:${port}` ], // https:// access to the server which does not support https
+    sitemap: false,
+    crawl: true,
+    plugins: [],
+  });
+  const results = await sitegazer.run();
+
+  expect(results).toEqual(sortObjects([
+    {
+      url: `https://localhost:${port}/`,
+      deviceType: "desktop",
+      pluginName: null,
+      message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
+      line: 1,
+      column: 1,
+    },
+    {
+      url: `https://localhost:${port}/`,
+      deviceType: "mobile",
+      pluginName: null,
+      message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
       line: 1,
       column: 1,
     },

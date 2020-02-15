@@ -4,17 +4,18 @@ import SiteGazer from "../src/sitegazer";
 import Server from "./server";
 import { sortObjects } from "./testutils";
 
-const url = "http://localhost:3456/";
+const port = 1234;
+const url = `http://localhost:${port}/`;
 
 let server: Server;
 
-beforeEach(() => {
-  server = new Server();
-  server.start();
+beforeEach(async () => {
+  server = new Server(port);
+  await server.start();
 });
 
-afterEach(() => {
-  server.close();
+afterEach(async () => {
+  await server.close();
 });
 
 test("Chrome Console Plugin", async () => {
@@ -28,20 +29,20 @@ test("Chrome Console Plugin", async () => {
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      url: "http://localhost:3456/",
+      url: `http://localhost:${port}/`,
       deviceType: "desktop",
       pluginName: "Chrome Console",
       line: 0,
       column: 0,
-      message: "Error: Error: Something is wrong in desktop site.\n    at http://localhost:3456/:7:23",
+      message: `Error: Error: Something is wrong in desktop site.\n    at http://localhost:${port}/:7:23`,
     },
     {
-      url: "http://localhost:3456/",
+      url: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Chrome Console",
       line: 0,
       column: 0,
-      message: "Error: Error: Something is wrong in mobile site.\n    at http://localhost:3456/:8:23",
+      message: `Error: Error: Something is wrong in mobile site.\n    at http://localhost:${port}/:8:23`,
     },
   ]));
 }, 20000);

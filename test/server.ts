@@ -3,10 +3,15 @@ import express = require("express");
 
 export default class {
   private server: Server;
+  private port: number;
 
-  start(): void {
+  constructor(port: number) {
+    this.port = port;
+  }
+
+  async start(): Promise<void> {
     const app = express();
-    const port = 3456;
+    const port = this.port;
 
     app.get("/", (req, res) => {
       // if mobile user agent is sent
@@ -56,6 +61,7 @@ export default class {
           <body>
             <a href="/">top</a>
             <a href="/link2">link 2</a>
+            <a href="https://example.com/">link to external host (should not be crawled)</a>
           </body>
         </html>
       `);
@@ -77,10 +83,45 @@ export default class {
       `);
     });
 
-    this.server = app.listen(port);
+    app.get("/sitemapped", (req, res) => {
+      res.send(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>A page only on sitemap.xml</title>
+          </head>
+          <body>
+            <span></span>
+          </body>
+        </html>
+      `);
+    });
+
+    app.get("/sitemap.xml", (req, res) => {
+      res.send(`<?xml version="1.0" encoding="UTF-8"?>
+        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+          <url>
+            <loc>http://localhost:${port}/sitemapped</loc>
+            <lastmod>2020-01-01</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+          </url>
+        </urlset>
+      `);
+    });
+
+    const self = this;
+
+    return new Promise(resolve => {
+      self.server = app.listen({ port }, () => resolve());
+    });
   }
 
-  close(): void {
-    this.server.close();
+  async close(): Promise<void> {
+    const self = this;
+
+    return new Promise(resolve => {
+      self.server.close(() => resolve());
+    });
   }
 }
