@@ -1,5 +1,7 @@
 # SiteGazer
 
+![GitHub Actions Status](https://github.com/phanect/sitegazer/workflows/GitHub%20Actions/badge.svg)
+
 SiteGazer crawls all of your pages and find errors from the crawled pages.
 
 ## Requirement

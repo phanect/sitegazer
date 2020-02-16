@@ -44,14 +44,16 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: yarn install
       - run: yarn run build
-      - run: yarn run release
+      # If you use `yarn run release`, it tries to use registry.yarnpkg.com and
+      # authentication fails.
+      - run: npm run release
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
     if: github.event_name == 'release'
