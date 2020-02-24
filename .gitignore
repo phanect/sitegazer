@@ -40,9 +40,6 @@ yarn-error.log*
 # See https://classic.yarnpkg.com/blog/2016/11/24/lockfiles-for-all/
 package-lock.json
 
-# Build tools: Babel & Webpack
-dist/
-
 # Other tools
 
 # Ava

@@ -1,0 +1,25 @@
+{
+  "name": "sitegazer",
+  "version": "0.0.3",
+  "description": "SiteGazer crawls all of your pages and find errors from the crawled pages",
+  "author": "Jumpei Ogawa <phanective@gmail.com>",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "lerna bootstrap",
+    "lint": "eslint --ext=.js,.jsx,.ts,.tsx .",
+    "build": "lerna run build",
+    "release-test": "lerna run release-test",
+    "release": "lerna run release",
+    "test": "lerna run test"
+  },
+  "devDependencies": {
+    "@phanect/eslint-plugin": "latest",
+    "eslint": "latest",
+    "eslint-plugin-jest": "latest",
+    "lerna": "^3.20.2"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  }
+}

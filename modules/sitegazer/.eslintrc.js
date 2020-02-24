@@ -12,7 +12,6 @@ module.exports = {
   parserOptions: {
     project: join(__dirname, "./tsconfig.json"),
   },
-  plugins: [ "@phanect" ],
 
   rules: {
     // Do not require return type for callback functions.
