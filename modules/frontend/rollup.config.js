@@ -1,5 +1,6 @@
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import copy from "rollup-plugin-copy";
 import livereload from "rollup-plugin-livereload";
 import svelte from "rollup-plugin-svelte";
 import { terser } from "rollup-plugin-terser";
@@ -32,6 +33,26 @@ export default {
     file: "public/build/bundle.js",
   },
   plugins: [
+    copy({
+      targets: [].concat(
+        [
+          "cog",
+          "check-circle",
+          "exclamation-circle",
+          "desktop",
+          "mobile-alt",
+        ].map(iconName => ({
+          src: `node_modules/@fortawesome/fontawesome-free/svgs/solid/${iconName}.svg`,
+          dest: "public/assets/vendor/fontawesome/",
+        })),
+        [
+          "mark-github",
+        ].map(iconName => ({
+          src: `node_modules/@primer/octicons/build/svg/${iconName}.svg`,
+          dest: "public/assets/vendor/octicons/",
+        })),
+      ),
+    }),
     svelte({
       // enable run-time checks when not in production
       dev: !isProd,
