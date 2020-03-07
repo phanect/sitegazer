@@ -17,6 +17,7 @@
     "@phanect/eslint-plugin": "latest",
     "eslint": "latest",
     "eslint-plugin-jest": "latest",
+    "eslint-plugin-svelte3": "latest",
     "lerna": "^3.20.2"
   },
   "engines": {
