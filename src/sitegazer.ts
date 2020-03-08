@@ -2,14 +2,15 @@ import * as puppeteer from "puppeteer";
 import Sitemapper from "sitemapper";
 
 import Config from "./interfaces/Config";
+import Page from "./interfaces/Page";
 import Plugin from "./interfaces/Plugin";
-import Issue from "./interfaces/Issue";
+import Results from "./Results";
 import { deduplicate, isURL, sleep } from "./utils";
 
 const interval = 2000;
 
 class SiteGazer {
-  private issues: Issue[] = [];
+  private results = new Results();
   private plugins: Plugin[];
   private config: Config;
 
@@ -51,7 +52,7 @@ class SiteGazer {
         } else if (typeof url === "string" && isURL(url)) {
           return new URL(url).href;
         } else {
-          this.issues.push({
+          this.results.add({
             pageURL: url,
             fileURL: url,
             deviceType: null,
@@ -86,7 +87,7 @@ class SiteGazer {
       const html = await res.text();
 
       if (!res.ok()) {
-        this.issues.push({
+        this.results.add({
           pageURL,
           fileURL: pageURL,
           deviceType,
@@ -102,7 +103,7 @@ class SiteGazer {
       return this.processURL(pageURL, html, deviceType, userAgent, errors);
     } catch (err) {
       if (err.message.startsWith("net::ERR_CONNECTION_REFUSED")) {
-        this.issues.push({
+        this.results.add({
           pageURL: url,
           fileURL: url,
           deviceType,
@@ -112,7 +113,7 @@ class SiteGazer {
           column: 1,
         });
       } else if (err.message.startsWith("net::ERR_SSL_PROTOCOL_ERROR")) {
-        this.issues.push({
+        this.results.add({
           pageURL: url,
           fileURL: url,
           deviceType,
@@ -122,7 +123,7 @@ class SiteGazer {
           column: 1,
         });
       } else {
-        this.issues.push({
+        this.results.add({
           pageURL: url,
           fileURL: url,
           deviceType,
@@ -139,15 +140,13 @@ class SiteGazer {
     console.info(`Processed ${url} (${deviceType})`);
 
     for (const plugin of this.plugins) {
-      const issues = await plugin({
+      this.results.add(await plugin({
         url: url,
         html,
         deviceType,
         userAgent,
         browserErrors,
-      });
-
-      this.issues = this.issues.concat(issues);
+      }));
     }
   }
 
@@ -167,7 +166,7 @@ class SiteGazer {
     this.addURLs(pages);
   }
 
-  public async run(): Promise<Issue[]> {
+  public async run(): Promise<Page[]> {
     if (this.config.sitemap === true) {
       await this.parseSiteMap();
     }
@@ -179,7 +178,7 @@ class SiteGazer {
       }
     }
 
-    return this.issues;
+    return this.results.toJSON();
   }
 }
 

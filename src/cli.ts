@@ -20,10 +20,17 @@ commander.parse(process.argv);
   }
 
   const sitegazer = new SiteGazer(config);
-  const issues = await sitegazer.run();
+  const pages = await sitegazer.run();
 
-  for (const issue of issues) {
-    console.info(`${issue.pageURL} (${issue.deviceType})`);
-    console.info(`${issue.line}:${issue.column} error (${issue.pluginName}) ${issue.message}` + "\n");
+  for (const page of pages) {
+    console.info(`${page.url} (${page.deviceType})`);
+
+    for (const file of page.files) {
+      console.info(`  ${file.url}`);
+
+      for (const issue of file.issues) {
+        console.info(`    ${issue.line}:${issue.column} error (${issue.pluginName}) ${issue.message}` + "\n");
+      }
+    }
   }
 })();

@@ -26,31 +26,38 @@ test("SiteGazer lint the given URLs", async () => {
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      pageURL: `http://localhost:${port}/`,
-      fileURL: `http://localhost:${port}/`,
+      url: `http://localhost:${port}/`,
       deviceType: "desktop",
-      pluginName: "Nu HTML Checker",
-      line: 3,
-      column: 26,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+      files: [{
+        url: `http://localhost:${port}/`,
+        issues: [{
+          pluginName: "Nu HTML Checker",
+          line: 3,
+          column: 26,
+          message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+        }],
+      }],
     },
     {
-      pageURL: `http://localhost:${port}/`,
-      fileURL: `http://localhost:${port}/`,
+      url: `http://localhost:${port}/`,
       deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      line: 3,
-      column: 26,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
-    },
-    {
-      pageURL: `http://localhost:${port}/`,
-      fileURL: `http://localhost:${port}/`,
-      deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      line: 6,
-      column: 15,
-      message: "Consider avoiding viewport values that prevent users from resizing documents.",
+      files: [{
+        url: `http://localhost:${port}/`,
+        issues: [
+          {
+            pluginName: "Nu HTML Checker",
+            line: 3,
+            column: 26,
+            message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+          },
+          {
+            pluginName: "Nu HTML Checker",
+            line: 6,
+            column: 15,
+            message: "Consider avoiding viewport values that prevent users from resizing documents.",
+          },
+        ],
+      }],
     },
   ]));
 }, 30000);
@@ -65,49 +72,65 @@ test("SiteGazer lint URLs in sitemap.xml when sitemap: true is given", async () 
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      pageURL: `http://localhost:${port}/`,
-      fileURL: `http://localhost:${port}/`,
+      url: `http://localhost:${port}/`,
       deviceType: "desktop",
-      pluginName: "Nu HTML Checker",
-      line: 3,
-      column: 26,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+      files: [{
+        url: `http://localhost:${port}/`,
+        issues: [{
+          pluginName: "Nu HTML Checker",
+          line: 3,
+          column: 26,
+          message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+        }],
+      }],
     },
     {
-      pageURL: `http://localhost:${port}/`,
-      fileURL: `http://localhost:${port}/`,
+      url: `http://localhost:${port}/`,
       deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      line: 3,
-      column: 26,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+      files: [{
+        url: `http://localhost:${port}/`,
+        issues: [
+          {
+            pluginName: "Nu HTML Checker",
+            line: 3,
+            column: 26,
+            message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+          },
+          {
+            pluginName: "Nu HTML Checker",
+            line: 6,
+            column: 15,
+            message: "Consider avoiding viewport values that prevent users from resizing documents.",
+          },
+        ],
+      }],
     },
     {
-      pageURL: `http://localhost:${port}/`,
-      fileURL: `http://localhost:${port}/`,
-      deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      line: 6,
-      column: 15,
-      message: "Consider avoiding viewport values that prevent users from resizing documents.",
-    },
-    {
-      pageURL: `http://localhost:${port}/sitemapped`,
-      fileURL: `http://localhost:${port}/sitemapped`,
+      url: `http://localhost:${port}/sitemapped`,
       deviceType: "desktop",
-      pluginName: "Nu HTML Checker",
-      line: 3,
-      column: 24,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+      files: [{
+        url: `http://localhost:${port}/sitemapped`,
+        issues: [{
+          pluginName: "Nu HTML Checker",
+          line: 3,
+          column: 24,
+          message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+        }],
+      }],
+
     },
     {
-      pageURL: `http://localhost:${port}/sitemapped`,
-      fileURL: `http://localhost:${port}/sitemapped`,
+      url: `http://localhost:${port}/sitemapped`,
       deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      line: 3,
-      column: 24,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+      files: [{
+        url: `http://localhost:${port}/sitemapped`,
+        issues: [{
+          pluginName: "Nu HTML Checker",
+          line: 3,
+          column: 24,
+          message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+        }],
+      }],
     },
   ]));
 }, 30000);
@@ -122,31 +145,38 @@ test("SiteGazer lint only the given URLs when sitemap: false is explicitly given
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      pageURL: `http://localhost:${port}/`,
-      fileURL: `http://localhost:${port}/`,
+      url: `http://localhost:${port}/`,
       deviceType: "desktop",
-      pluginName: "Nu HTML Checker",
-      line: 3,
-      column: 26,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+      files: [{
+        url: `http://localhost:${port}/`,
+        issues: [{
+          pluginName: "Nu HTML Checker",
+          line: 3,
+          column: 26,
+          message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+        }],
+      }],
     },
     {
-      pageURL: `http://localhost:${port}/`,
-      fileURL: `http://localhost:${port}/`,
+      url: `http://localhost:${port}/`,
       deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      line: 3,
-      column: 26,
-      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
-    },
-    {
-      pageURL: `http://localhost:${port}/`,
-      fileURL: `http://localhost:${port}/`,
-      deviceType: "mobile",
-      pluginName: "Nu HTML Checker",
-      line: 6,
-      column: 15,
-      message: "Consider avoiding viewport values that prevent users from resizing documents.",
+      files: [{
+        url: `http://localhost:${port}/`,
+        issues: [
+          {
+            pluginName: "Nu HTML Checker",
+            line: 3,
+            column: 26,
+            message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+          },
+          {
+            pluginName: "Nu HTML Checker",
+            line: 6,
+            column: 15,
+            message: "Consider avoiding viewport values that prevent users from resizing documents.",
+          },
+        ],
+      }],
     },
   ]));
 }, 30000);
@@ -178,22 +208,30 @@ test("SiteGazer returns an error if specified host doesn't respond.", async () =
 
   expect(results).toEqual(sortObjects([
     {
-      pageURL: "http://localhost:7171/",
-      fileURL: "http://localhost:7171/",
+      url: "http://localhost:7171/",
       deviceType: "desktop",
-      pluginName: null,
-      message: "Error: Connection refused to localhost:7171. (ERR_CONNECTION_REFUSED)",
-      line: 1,
-      column: 1,
+      files: [{
+        url: "http://localhost:7171/",
+        issues: [{
+          pluginName: null,
+          message: "Error: Connection refused to localhost:7171. (ERR_CONNECTION_REFUSED)",
+          line: 1,
+          column: 1,
+        }],
+      }],
     },
     {
-      pageURL: "http://localhost:7171/",
-      fileURL: "http://localhost:7171/",
+      url: "http://localhost:7171/",
       deviceType: "mobile",
-      pluginName: null,
-      message: "Error: Connection refused to localhost:7171. (ERR_CONNECTION_REFUSED)",
-      line: 1,
-      column: 1,
+      files: [{
+        url: "http://localhost:7171/",
+        issues: [{
+          pluginName: null,
+          message: "Error: Connection refused to localhost:7171. (ERR_CONNECTION_REFUSED)",
+          line: 1,
+          column: 1,
+        }],
+      }],
     },
   ]));
 }, 30000);
@@ -207,22 +245,30 @@ test("SiteGazer returns an error on TLS error.", async () => {
 
   expect(results).toEqual(sortObjects([
     {
-      pageURL: `https://localhost:${port}/`,
-      fileURL: `https://localhost:${port}/`,
+      url: `https://localhost:${port}/`,
       deviceType: "desktop",
-      pluginName: null,
-      message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
-      line: 1,
-      column: 1,
+      files: [{
+        url: `https://localhost:${port}/`,
+        issues: [{
+          pluginName: null,
+          message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
+          line: 1,
+          column: 1,
+        }],
+      }],
     },
     {
-      pageURL: `https://localhost:${port}/`,
-      fileURL: `https://localhost:${port}/`,
+      url: `https://localhost:${port}/`,
       deviceType: "mobile",
-      pluginName: null,
-      message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
-      line: 1,
-      column: 1,
+      files: [{
+        url: `https://localhost:${port}/`,
+        issues: [{
+          pluginName: null,
+          message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
+          line: 1,
+          column: 1,
+        }],
+      }],
     },
   ]));
 });
