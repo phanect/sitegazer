@@ -26,7 +26,8 @@ test("SiteGazer lint the given URLs", async () => {
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      url: `http://localhost:${port}/`,
+      pageURL: `http://localhost:${port}/`,
+      fileURL: `http://localhost:${port}/`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -34,7 +35,8 @@ test("SiteGazer lint the given URLs", async () => {
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: `http://localhost:${port}/`,
+      pageURL: `http://localhost:${port}/`,
+      fileURL: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -42,7 +44,8 @@ test("SiteGazer lint the given URLs", async () => {
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: `http://localhost:${port}/`,
+      pageURL: `http://localhost:${port}/`,
+      fileURL: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 6,
@@ -62,7 +65,8 @@ test("SiteGazer lint URLs in sitemap.xml when sitemap: true is given", async () 
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      url: `http://localhost:${port}/`,
+      pageURL: `http://localhost:${port}/`,
+      fileURL: `http://localhost:${port}/`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -70,7 +74,8 @@ test("SiteGazer lint URLs in sitemap.xml when sitemap: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: `http://localhost:${port}/`,
+      pageURL: `http://localhost:${port}/`,
+      fileURL: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -78,7 +83,8 @@ test("SiteGazer lint URLs in sitemap.xml when sitemap: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: `http://localhost:${port}/`,
+      pageURL: `http://localhost:${port}/`,
+      fileURL: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 6,
@@ -86,7 +92,8 @@ test("SiteGazer lint URLs in sitemap.xml when sitemap: true is given", async () 
       message: "Consider avoiding viewport values that prevent users from resizing documents.",
     },
     {
-      url: `http://localhost:${port}/sitemapped`,
+      pageURL: `http://localhost:${port}/sitemapped`,
+      fileURL: `http://localhost:${port}/sitemapped`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -94,7 +101,8 @@ test("SiteGazer lint URLs in sitemap.xml when sitemap: true is given", async () 
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: `http://localhost:${port}/sitemapped`,
+      pageURL: `http://localhost:${port}/sitemapped`,
+      fileURL: `http://localhost:${port}/sitemapped`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -114,7 +122,8 @@ test("SiteGazer lint only the given URLs when sitemap: false is explicitly given
 
   expect(sortObjects(results)).toEqual(sortObjects([
     {
-      url: `http://localhost:${port}/`,
+      pageURL: `http://localhost:${port}/`,
+      fileURL: `http://localhost:${port}/`,
       deviceType: "desktop",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -122,7 +131,8 @@ test("SiteGazer lint only the given URLs when sitemap: false is explicitly given
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: `http://localhost:${port}/`,
+      pageURL: `http://localhost:${port}/`,
+      fileURL: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 3,
@@ -130,7 +140,8 @@ test("SiteGazer lint only the given URLs when sitemap: false is explicitly given
       message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
     },
     {
-      url: `http://localhost:${port}/`,
+      pageURL: `http://localhost:${port}/`,
+      fileURL: `http://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: "Nu HTML Checker",
       line: 6,
@@ -167,7 +178,8 @@ test("SiteGazer returns an error if specified host doesn't respond.", async () =
 
   expect(results).toEqual(sortObjects([
     {
-      url: "http://localhost:7171/",
+      pageURL: "http://localhost:7171/",
+      fileURL: "http://localhost:7171/",
       deviceType: "desktop",
       pluginName: null,
       message: "Error: Connection refused to localhost:7171. (ERR_CONNECTION_REFUSED)",
@@ -175,7 +187,8 @@ test("SiteGazer returns an error if specified host doesn't respond.", async () =
       column: 1,
     },
     {
-      url: "http://localhost:7171/",
+      pageURL: "http://localhost:7171/",
+      fileURL: "http://localhost:7171/",
       deviceType: "mobile",
       pluginName: null,
       message: "Error: Connection refused to localhost:7171. (ERR_CONNECTION_REFUSED)",
@@ -194,7 +207,8 @@ test("SiteGazer returns an error on TLS error.", async () => {
 
   expect(results).toEqual(sortObjects([
     {
-      url: `https://localhost:${port}/`,
+      pageURL: `https://localhost:${port}/`,
+      fileURL: `https://localhost:${port}/`,
       deviceType: "desktop",
       pluginName: null,
       message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
@@ -202,7 +216,8 @@ test("SiteGazer returns an error on TLS error.", async () => {
       column: 1,
     },
     {
-      url: `https://localhost:${port}/`,
+      pageURL: `https://localhost:${port}/`,
+      fileURL: `https://localhost:${port}/`,
       deviceType: "mobile",
       pluginName: null,
       message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",

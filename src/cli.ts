@@ -23,7 +23,7 @@ commander.parse(process.argv);
   const issues = await sitegazer.run();
 
   for (const issue of issues) {
-    console.info(`${issue.url} (${issue.deviceType})`);
+    console.info(`${issue.pageURL} (${issue.deviceType})`);
     console.info(`${issue.line}:${issue.column} error (${issue.pluginName}) ${issue.message}` + "\n");
   }
 })();

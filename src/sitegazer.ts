@@ -52,7 +52,8 @@ class SiteGazer {
           return new URL(url).href;
         } else {
           this.issues.push({
-            url,
+            pageURL: url,
+            fileURL: url,
             deviceType: null,
             pluginName: null,
             message: `${url} is not a URL string`,
@@ -86,7 +87,8 @@ class SiteGazer {
 
       if (!res.ok()) {
         this.issues.push({
-          url: pageURL,
+          pageURL,
+          fileURL: pageURL,
           deviceType,
           pluginName: null,
           message: `Error: Request failure for ${url}. ${res.status()}: ${res.statusText()}`,
@@ -101,7 +103,8 @@ class SiteGazer {
     } catch (err) {
       if (err.message.startsWith("net::ERR_CONNECTION_REFUSED")) {
         this.issues.push({
-          url: url,
+          pageURL: url,
+          fileURL: url,
           deviceType,
           pluginName: null,
           message: `Error: Connection refused to ${new URL(url).host}. (ERR_CONNECTION_REFUSED)`,
@@ -110,7 +113,8 @@ class SiteGazer {
         });
       } else if (err.message.startsWith("net::ERR_SSL_PROTOCOL_ERROR")) {
         this.issues.push({
-          url: url,
+          pageURL: url,
+          fileURL: url,
           deviceType,
           pluginName: null,
           message: "Error: SSL error. (ERR_SSL_PROTOCOL_ERROR)",
@@ -119,7 +123,8 @@ class SiteGazer {
         });
       } else {
         this.issues.push({
-          url: url,
+          pageURL: url,
+          fileURL: url,
           deviceType,
           pluginName: null,
           message: `Error: Unexpected error on browser access: ${err.toString()}`,
