@@ -69,9 +69,17 @@ class SiteGazer {
   }
 
   private async loadPage(url: string, deviceType: string, userAgent: string): Promise<void> {
-    const errors: Error[] = [];
+    const issues: Issue[] = [];
     const onError = (err: Error): void => {
-      errors.push(err);
+      issues.push({
+        pageURL: url,
+        fileURL: url,
+        deviceType,
+        pluginName: "Chrome Console",
+        message: err.toString(),
+        line: 0,
+        column: 0,
+      });
     };
 
     const browser = await puppeteer.launch();
@@ -100,7 +108,7 @@ class SiteGazer {
 
       await browser.close();
 
-      return this.processURL(pageURL, html, deviceType, userAgent, errors);
+      return this.processURL(pageURL, html, deviceType, userAgent, issues);
     } catch (err) {
       if (err.message.startsWith("net::ERR_CONNECTION_REFUSED")) {
         this.results.add({
@@ -136,7 +144,7 @@ class SiteGazer {
     }
   }
 
-  private async processURL(url: string, html: string, deviceType: string, userAgent: string, browserErrors: Error[]): Promise<void> {
+  private async processURL(url: string, html: string, deviceType: string, userAgent: string, issues: Issue[]): Promise<void> {
     console.info(`Processed ${url} (${deviceType})`);
 
     for (const plugin of this.plugins) {
@@ -145,7 +153,7 @@ class SiteGazer {
         html,
         deviceType,
         userAgent,
-        browserErrors,
+        issues,
       }));
     }
   }
