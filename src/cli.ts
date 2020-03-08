@@ -20,10 +20,10 @@ commander.parse(process.argv);
   }
 
   const sitegazer = new SiteGazer(config);
-  const warnings = await sitegazer.run();
+  const issues = await sitegazer.run();
 
-  for (const warning of warnings) {
-    console.info(`${warning.url} (${warning.deviceType})`);
-    console.info(`${warning.line}:${warning.column} error (${warning.pluginName}) ${warning.message}` + "\n");
+  for (const issue of issues) {
+    console.info(`${issue.url} (${issue.deviceType})`);
+    console.info(`${issue.line}:${issue.column} error (${issue.pluginName}) ${issue.message}` + "\n");
   }
 })();

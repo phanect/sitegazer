@@ -3,13 +3,13 @@ import Sitemapper from "sitemapper";
 
 import Config from "./interfaces/Config";
 import Plugin from "./interfaces/Plugin";
-import Warning from "./interfaces/Warning";
+import Issue from "./interfaces/Issue";
 import { deduplicate, isURL, sleep } from "./utils";
 
 const interval = 2000;
 
 class SiteGazer {
-  private warnings: Warning[] = [];
+  private issues: Issue[] = [];
   private plugins: Plugin[];
   private config: Config;
 
@@ -51,7 +51,7 @@ class SiteGazer {
         } else if (typeof url === "string" && isURL(url)) {
           return new URL(url).href;
         } else {
-          this.warnings.push({
+          this.issues.push({
             url,
             deviceType: null,
             pluginName: null,
@@ -85,7 +85,7 @@ class SiteGazer {
       const html = await res.text();
 
       if (!res.ok()) {
-        this.warnings.push({
+        this.issues.push({
           url: pageURL,
           deviceType,
           pluginName: null,
@@ -100,7 +100,7 @@ class SiteGazer {
       return this.processURL(pageURL, html, deviceType, userAgent, errors);
     } catch (err) {
       if (err.message.startsWith("net::ERR_CONNECTION_REFUSED")) {
-        this.warnings.push({
+        this.issues.push({
           url: url,
           deviceType,
           pluginName: null,
@@ -109,7 +109,7 @@ class SiteGazer {
           column: 1,
         });
       } else if (err.message.startsWith("net::ERR_SSL_PROTOCOL_ERROR")) {
-        this.warnings.push({
+        this.issues.push({
           url: url,
           deviceType,
           pluginName: null,
@@ -118,7 +118,7 @@ class SiteGazer {
           column: 1,
         });
       } else {
-        this.warnings.push({
+        this.issues.push({
           url: url,
           deviceType,
           pluginName: null,
@@ -134,7 +134,7 @@ class SiteGazer {
     console.info(`Processed ${url} (${deviceType})`);
 
     for (const plugin of this.plugins) {
-      const warnings = await plugin({
+      const issues = await plugin({
         url: url,
         html,
         deviceType,
@@ -142,7 +142,7 @@ class SiteGazer {
         browserErrors,
       });
 
-      this.warnings = this.warnings.concat(warnings);
+      this.issues = this.issues.concat(issues);
     }
   }
 
@@ -162,7 +162,7 @@ class SiteGazer {
     this.addURLs(pages);
   }
 
-  public async run(): Promise<Warning[]> {
+  public async run(): Promise<Issue[]> {
     if (this.config.sitemap === true) {
       await this.parseSiteMap();
     }
@@ -174,7 +174,7 @@ class SiteGazer {
       }
     }
 
-    return this.warnings;
+    return this.issues;
   }
 }
 
