@@ -100,17 +100,6 @@ class SiteGazer {
         });
       }
 
-      // Parse links & add
-      if (this.config.crawl) {
-        for (const a of await page.$$("a")) {
-          const urlInPage = new URL(await (await a.getProperty("href")).jsonValue() as string);
-
-          if (this.hostsToCrawl.includes(urlInPage.host)) {
-            this.addURLs([ urlInPage ]);
-          }
-        }
-      }
-
       await browser.close();
 
       return this.processURL(pageURL, html, deviceType, userAgent, errors);

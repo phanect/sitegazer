@@ -22,7 +22,6 @@ test("Chrome Console Plugin", async () => {
   const sitegazer = new SiteGazer({
     urls: [ url ],
     sitemap: false,
-    crawl: false,
     plugins: [ "chrome-console" ],
   });
   const results = await sitegazer.run();

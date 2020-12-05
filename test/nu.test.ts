@@ -22,7 +22,6 @@ test("Nu HTML Checker Plugin", async () => {
   const sitegazer = new SiteGazer({
     urls: [ url ],
     sitemap: false,
-    crawl: false,
     plugins: [ "nu" ],
   });
   const results = await sitegazer.run();
