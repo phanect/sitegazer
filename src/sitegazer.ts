@@ -13,7 +13,7 @@ class SiteGazer {
   private plugins: Plugin[];
   private config: Config;
 
-  private urlsToCrawl: string[] = [];
+  private urls: string[] = [];
   private processedURLs: string[] = [];
 
   private hostsToCrawl: string[] = [];
@@ -64,11 +64,11 @@ class SiteGazer {
           });
           return undefined;
         }
-      }).filter((urlString: string) => urlString && !this.urlsToCrawl.includes(urlString) && !this.processedURLs.includes(urlString));
+      }).filter((urlString: string) => urlString && !this.urls.includes(urlString) && !this.processedURLs.includes(urlString));
 
-    this.urlsToCrawl = this.urlsToCrawl.concat(urlStrings);
+    this.urls = this.urls.concat(urlStrings);
 
-    this.hostsToCrawl = deduplicate(this.urlsToCrawl.map(url => new URL(url).host));
+    this.hostsToCrawl = deduplicate(this.urls.map(url => new URL(url).host));
   }
 
   private async loadPage(url: string, deviceType: string, userAgent: string): Promise<void> {
@@ -172,7 +172,7 @@ class SiteGazer {
     }
 
     while (true) {
-      const url = this.urlsToCrawl.shift();
+      const url = this.urls.shift();
       this.processedURLs.push(url);
 
       if (url === undefined) {
