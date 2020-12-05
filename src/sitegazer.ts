@@ -14,7 +14,6 @@ class SiteGazer {
   private config: Config;
 
   private urls: string[] = [];
-  private processedURLs: string[] = [];
 
   private userAgents: Record<string, string> = {
     desktop: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
@@ -62,7 +61,7 @@ class SiteGazer {
           });
           return undefined;
         }
-      }).filter((urlString: string) => urlString && !this.urls.includes(urlString) && !this.processedURLs.includes(urlString));
+      }).filter((urlString: string) => urlString && !this.urls.includes(urlString));
 
     this.urls = this.urls.concat(urlStrings);
   }
@@ -168,14 +167,7 @@ class SiteGazer {
       await this.parseSiteMap();
     }
 
-    while (true) {
-      const url = this.urls.shift();
-      this.processedURLs.push(url);
-
-      if (url === undefined) {
-        break;
-      }
-
+    for (const url of this.urls) {
       for (const [ deviceType, userAgent ] of Object.entries(this.userAgents)) {
         await this.loadPage(url, deviceType, userAgent);
         await sleep(interval);
