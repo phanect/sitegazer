@@ -32,9 +32,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      # Since yarn.lock is ignored when published, delete it before yarn install
-      # to install the same versions as users
-      - run: rm yarn.lock && yarn install
+      - run: yarn install
       - run: yarn run build
       - run: yarn test
       - run: yarn run lint
