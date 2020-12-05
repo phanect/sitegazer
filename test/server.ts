@@ -106,6 +106,12 @@ export default class {
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
           </url>
+          <url>
+            <loc>http://localhost:${port}/</loc>
+            <lastmod>2020-01-01</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.8</priority>
+          </url>
         </urlset>
       `);
     });

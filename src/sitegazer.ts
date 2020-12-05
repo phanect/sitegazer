@@ -51,17 +51,9 @@ class SiteGazer {
       _urls = [ urls ];
     }
 
-    const urlStrings: string[] = _urls.map((url: string|URL) =>
-      (typeof url === "string") ? new URL(url).href : url.href);
-
-    for (const [ i, url ] of urlStrings.entries()) {
-      if (
-        this.urlsToCrawl.includes(url) ||
-        this.processedURLs.includes(url)
-      ) {
-        urlStrings.splice(0, i + 1);
-      }
-    }
+    const urlStrings: string[] = _urls
+      .map((url: string|URL) => (typeof url === "string") ? new URL(url).href : url.href)
+      .filter((urlString: string) => !this.urlsToCrawl.includes(urlString) && !this.processedURLs.includes(urlString));
 
     this.urlsToCrawl = this.urlsToCrawl.concat(urlStrings);
 
