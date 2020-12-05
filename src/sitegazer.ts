@@ -168,7 +168,7 @@ class SiteGazer {
 
   public async run(): Promise<Warning[]> {
     if (this.config.sitemap === true) {
-      this.parseSiteMap();
+      await this.parseSiteMap();
     }
 
     while (true) {
