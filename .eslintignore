@@ -1,6 +1,3 @@
-node_modules/
-
-modules/frontend/public/build/
-modules/sitegazer/dist/
+dist/
 types/supercrawler/index.d.ts
 jest.config.js

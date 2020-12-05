@@ -33,9 +33,15 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Since this is an npm module, lockfiles are ignored when published.
+# Since this is an npm module, package-lock.json is ignored when published
+# yarn.lock is also ignored when published, but it is kept
+# because it might be sometimes useful for debug errors caused by
+# breaking changes of the dependencies.
+# See https://classic.yarnpkg.com/blog/2016/11/24/lockfiles-for-all/
 package-lock.json
-yarn.lock
+
+# Build tools: Babel & Webpack
+dist/
 
 # Other tools
 
