@@ -62,7 +62,7 @@ module.exports = {
     "https://phanective.org/cv/",
     "https://google.com",
   ],
-  sitemap: false,
+  sitemap: true,
   plugins: [ "nu", "chrome-console" ],
   userAgents: {
     desktop: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
@@ -81,7 +81,7 @@ URLs to lint.
 ### `sitemap`
 
 Type: `boolean`
-Default: `true`
+Default: `false`
 
 If true, SiteGazer lint the URLs listed in sitemap.xml, in addition to URLs listed in `urls`.
 
