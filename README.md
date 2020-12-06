@@ -6,7 +6,7 @@ SiteGazer crawls all of your pages and find errors from the crawled pages.
 
 ## Requirement
 
-- Node.js 10+
+- Node.js 10.x, 12.x, 14.x, or 15.x
 - Java 8+ (if you want to run `nu` plugin)
 - [puppeteer dependencies](https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix) if you want to install SiteGazer on Linux (SiteGazer depends on puppeteer)
 
