@@ -23,6 +23,9 @@ Thumbs.db
 #
 # Tools
 #
+.github/
+.editorconfig
+.gitattributes
 .gitignore
 
 #

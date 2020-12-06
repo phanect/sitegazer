@@ -37,6 +37,9 @@ yarn-error.log*
 package-lock.json
 yarn.lock
 
+# Build tools: Babel & Webpack
+dist/
+
 # Other tools
 
 # Ava
