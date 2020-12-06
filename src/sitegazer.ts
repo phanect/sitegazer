@@ -38,7 +38,7 @@ class SiteGazer {
     this.addURLs(config.urls);
   }
 
-  private addURLs(urls: string[]|URL[]): void {
+  private addURLs(urls: string|URL|string[]|URL[]): void {
     let _urls: (string|URL)[];
 
     if (Array.isArray(urls)) {
