@@ -20,7 +20,6 @@ afterEach(async () => {
 test("SiteGazer lint the given URLs", async () => {
   const sitegazer = new SiteGazer({
     urls: [ url ],
-    sitemap: false,
     plugins: [ "nu" ],
   });
   const results = await sitegazer.run();
@@ -105,11 +104,46 @@ test("SiteGazer lint URLs in sitemap.xml when sitemap: true is given", async () 
   ]));
 }, 30000);
 
+test("SiteGazer lint only the given URLs when sitemap: false is explicitly given", async () => {
+  const sitegazer = new SiteGazer({
+    urls: [ url ],
+    sitemap: false,
+    plugins: [ "nu" ],
+  });
+  const results = await sitegazer.run();
+
+  expect(sortObjects(results)).toEqual(sortObjects([
+    {
+      url: `http://localhost:${port}/`,
+      deviceType: "desktop",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 26,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+    {
+      url: `http://localhost:${port}/`,
+      deviceType: "mobile",
+      pluginName: "Nu HTML Checker",
+      line: 3,
+      column: 26,
+      message: "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.",
+    },
+    {
+      url: `http://localhost:${port}/`,
+      deviceType: "mobile",
+      pluginName: "Nu HTML Checker",
+      line: 6,
+      column: 15,
+      message: "Consider avoiding viewport values that prevent users from resizing documents.",
+    },
+  ]));
+}, 30000);
+
 test("SiteGazer returns error when no URL is given", async () => {
   expect(() => {
     new SiteGazer({
       urls: [],
-      sitemap: false,
       plugins: [ "nu" ],
     });
   }).toThrow(/^No URL is given$/);
@@ -117,7 +151,6 @@ test("SiteGazer returns error when no URL is given", async () => {
   expect(() => {
     new SiteGazer({
       urls: undefined,
-      sitemap: false,
       plugins: [ "nu" ],
     });
   }).toThrow(/^No URL is given$/);
@@ -128,7 +161,6 @@ test("SiteGazer returns an error if specified host doesn't respond.", async () =
     urls: [
       inexistentURL,
     ],
-    sitemap: false,
     plugins: [],
   });
   const results = await sitegazer.run();
@@ -156,7 +188,6 @@ test("SiteGazer returns an error if specified host doesn't respond.", async () =
 test("SiteGazer returns an error on TLS error.", async () => {
   const sitegazer = new SiteGazer({
     urls: [ `https://localhost:${port}` ], // https:// access to the server which does not support https
-    sitemap: false,
     plugins: [],
   });
   const results = await sitegazer.run();
