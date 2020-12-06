@@ -217,6 +217,15 @@ test("SiteGazer returns error when no URL is given", async () => {
       plugins: [ "nu" ],
     });
   }).toThrow(/^No URL is given$/);
+
+  expect(() => {
+    new SiteGazer({
+      urls: undefined,
+      sitemap: false,
+      crawl: false,
+      plugins: [ "nu" ],
+    });
+  }).toThrow(/^No URL is given$/);
 }, 30000);
 
 test("SiteGazer returns an error if specified host doesn't respond.", async () => {

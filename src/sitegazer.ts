@@ -26,7 +26,10 @@ class SiteGazer {
   public constructor(config: Config) {
     this.config = config;
 
-    if (this.config.urls.length < 1) {
+    if (
+      !this.config.urls ||
+      (Array.isArray(this.config.urls) && this.config.urls.length < 1)
+    ) {
       throw new Error("No URL is given");
     }
 
