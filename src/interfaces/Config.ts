@@ -6,5 +6,4 @@ export default interface Config {
   crawl: boolean;
   plugins: string[];
   userAgents?: Record<string, string>;
-  config?: any;
 }
