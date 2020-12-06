@@ -4,7 +4,7 @@ import Sitemapper from "sitemapper";
 import Config from "./interfaces/Config";
 import Plugin from "./interfaces/Plugin";
 import Warning from "./interfaces/Warning";
-import { deduplicate, sleep } from "./utils";
+import { deduplicate, isURL, sleep } from "./utils";
 
 const interval = 2000;
 
@@ -48,8 +48,23 @@ class SiteGazer {
     }
 
     const urlStrings: string[] = _urls
-      .map((url: string|URL) => (typeof url === "string") ? new URL(url).href : url.href)
-      .filter((urlString: string) => !this.urlsToCrawl.includes(urlString) && !this.processedURLs.includes(urlString));
+      .map((url: string|URL) => {
+        if (url instanceof URL) {
+          return url.href;
+        } else if (typeof url === "string" && isURL(url)) {
+          return new URL(url).href;
+        } else {
+          this.warnings.push({
+            url,
+            deviceType: null,
+            pluginName: null,
+            message: `${url} is not a URL string`,
+            line: 1,
+            column: 1,
+          });
+          return undefined;
+        }
+      }).filter((urlString: string) => urlString && !this.urlsToCrawl.includes(urlString) && !this.processedURLs.includes(urlString));
 
     this.urlsToCrawl = this.urlsToCrawl.concat(urlStrings);
 

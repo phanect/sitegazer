@@ -12,6 +12,25 @@ export function deduplicate<T>(arr: T[]): T[] {
 }
 
 /**
+ * Check if given string is URL string.
+ *
+ * @param {string} urlStr - string to check
+ * @returns {boolean} true if given string is URL. False if not.
+ */
+export function isURL(urlStr: string): boolean {
+  try {
+    new URL(urlStr);
+    return true;
+  } catch (err) {
+    if (err instanceof TypeError) {
+      return false;
+    } else {
+      throw err;
+    }
+  }
+}
+
+/**
  * Sleep for the specified time.
  *
  * @param {number} ms - The time to wait (in milliseconds).
