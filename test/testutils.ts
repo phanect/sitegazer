@@ -6,8 +6,8 @@
  * @param {object[]} objects - Aarray of objects.
  * @returns {object[]} - Sorted array of the objects.
  */
-export function sortObjects(objects: object[]): object[] {
-  return objects.sort((obj1: any, obj2: any) => {
+export function sortObjects(objects: Record<string, any>[]): Record<string, any>[] {
+  return objects.sort((obj1, obj2) => {
     const keys = Object.keys(obj1).sort();
 
     for (const key of keys) {

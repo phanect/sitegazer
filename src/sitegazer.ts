@@ -4,7 +4,7 @@ import Sitemapper from "sitemapper";
 import Config from "./interfaces/Config";
 import Plugin from "./interfaces/Plugin";
 import Warning from "./interfaces/Warning";
-import { deduplicate, sleep } from "./utils";
+import { deduplicate, isURL, sleep } from "./utils";
 
 const interval = 2000;
 
@@ -18,7 +18,7 @@ class SiteGazer {
 
   private hostsToCrawl: string[] = [];
 
-  private userAgents: object = {
+  private userAgents: Record<string, string> = {
     desktop: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
     mobile: "Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Mobile Safari/537.36",
   };
@@ -26,15 +26,11 @@ class SiteGazer {
   public constructor(config: Config) {
     this.config = config;
 
-    if (this.config.urls.length < 1) {
-      this.warnings.push({
-        url: null,
-        deviceType: null,
-        pluginName: null,
-        message: "No URL is given.",
-        line: 1,
-        column: 1,
-      });
+    if (
+      !this.config.urls ||
+      (Array.isArray(this.config.urls) && this.config.urls.length < 1)
+    ) {
+      throw new Error("No URL is given");
     }
 
     this.plugins = this.config.plugins.map(plugin => require(`./plugins/${plugin}`).default);
@@ -42,7 +38,7 @@ class SiteGazer {
     this.addURLs(config.urls);
   }
 
-  private addURLs(urls: string[]|URL[]): void {
+  private addURLs(urls: string|URL|string[]|URL[]): void {
     let _urls: (string|URL)[];
 
     if (Array.isArray(urls)) {
@@ -51,17 +47,24 @@ class SiteGazer {
       _urls = [ urls ];
     }
 
-    const urlStrings: string[] = _urls.map((url: string|URL) =>
-      (typeof url === "string") ? new URL(url).href : url.href);
-
-    for (const [ i, url ] of urlStrings.entries()) {
-      if (
-        this.urlsToCrawl.includes(url) ||
-        this.processedURLs.includes(url)
-      ) {
-        urlStrings.splice(0, i + 1);
-      }
-    }
+    const urlStrings: string[] = _urls
+      .map((url: string|URL) => {
+        if (url instanceof URL) {
+          return url.href;
+        } else if (typeof url === "string" && isURL(url)) {
+          return new URL(url).href;
+        } else {
+          this.warnings.push({
+            url,
+            deviceType: null,
+            pluginName: null,
+            message: `${url} is not a URL string`,
+            line: 1,
+            column: 1,
+          });
+          return undefined;
+        }
+      }).filter((urlString: string) => urlString && !this.urlsToCrawl.includes(urlString) && !this.processedURLs.includes(urlString));
 
     this.urlsToCrawl = this.urlsToCrawl.concat(urlStrings);
 
@@ -176,7 +179,7 @@ class SiteGazer {
 
   public async run(): Promise<Warning[]> {
     if (this.config.sitemap === true) {
-      this.parseSiteMap();
+      await this.parseSiteMap();
     }
 
     while (true) {
