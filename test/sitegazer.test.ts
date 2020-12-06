@@ -209,24 +209,14 @@ test("SiteGazer lint URLs in sitemap.xml when sitemap: true is given", async () 
 }, 30000);
 
 test("SiteGazer returns error when no URL is given", async () => {
-  const sitegazer = new SiteGazer({
-    urls: [],
-    sitemap: false,
-    crawl: false,
-    plugins: [ "nu" ],
-  });
-  const results = await sitegazer.run();
-
-  expect(sortObjects(results)).toEqual(sortObjects([
-    {
-      url: null,
-      deviceType: null,
-      pluginName: null,
-      line: 1,
-      column: 1,
-      message: "No URL is given.",
-    },
-  ]));
+  expect(() => {
+    new SiteGazer({
+      urls: [],
+      sitemap: false,
+      crawl: false,
+      plugins: [ "nu" ],
+    });
+  }).toThrow(/^No URL is given$/);
 }, 30000);
 
 test("SiteGazer returns an error if specified host doesn't respond.", async () => {
