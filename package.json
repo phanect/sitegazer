@@ -1,10 +1,9 @@
 {
   "name": "sitegazer",
   "version": "0.0.3",
-  "description": "SiteGazer crawls all of your pages and find errors from the crawled pages",
+  "description": "Runtime Lint for Web Applications: SiteGazer find console errors & HTML errors from the generated HTML.",
   "keywords": [
-    "linter",
-    "crawler"
+    "linter"
   ],
   "author": "Jumpei Ogawa <phanective@gmail.com>",
   "license": "Apache-2.0",

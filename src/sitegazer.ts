@@ -13,10 +13,7 @@ class SiteGazer {
   private plugins: Plugin[];
   private config: Config;
 
-  private urlsToCrawl: string[] = [];
-  private processedURLs: string[] = [];
-
-  private hostsToCrawl: string[] = [];
+  private urls: string[] = [];
 
   private userAgents: Record<string, string> = {
     desktop: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
@@ -64,11 +61,9 @@ class SiteGazer {
           });
           return undefined;
         }
-      }).filter((urlString: string) => urlString && !this.urlsToCrawl.includes(urlString) && !this.processedURLs.includes(urlString));
+      }).filter((urlString: string) => urlString && !this.urls.includes(urlString));
 
-    this.urlsToCrawl = this.urlsToCrawl.concat(urlStrings);
-
-    this.hostsToCrawl = deduplicate(this.urlsToCrawl.map(url => new URL(url).host));
+    this.urls = this.urls.concat(urlStrings);
   }
 
   private async loadPage(url: string, deviceType: string, userAgent: string): Promise<void> {
@@ -98,17 +93,6 @@ class SiteGazer {
           line: 1,
           column: 1,
         });
-      }
-
-      // Parse links & add
-      if (this.config.crawl) {
-        for (const a of await page.$$("a")) {
-          const urlInPage = new URL(await (await a.getProperty("href")).jsonValue() as string);
-
-          if (this.hostsToCrawl.includes(urlInPage.host)) {
-            this.addURLs([ urlInPage ]);
-          }
-        }
       }
 
       await browser.close();
@@ -163,9 +147,10 @@ class SiteGazer {
   }
 
   private async parseSiteMap(): Promise<void> {
+    const targetHosts = deduplicate(this.urls.map(url => new URL(url).host));
     let pages: string[] = [];
 
-    for (const host of this.hostsToCrawl) {
+    for (const host of targetHosts) {
       const sitemapper = new Sitemapper({
         url: `http://${host}/sitemap.xml`,
         timeout: 30000,
@@ -182,14 +167,7 @@ class SiteGazer {
       await this.parseSiteMap();
     }
 
-    while (true) {
-      const url = this.urlsToCrawl.shift();
-      this.processedURLs.push(url);
-
-      if (url === undefined) {
-        break;
-      }
-
+    for (const url of this.urls) {
       for (const [ deviceType, userAgent ] of Object.entries(this.userAgents)) {
         await this.loadPage(url, deviceType, userAgent);
         await sleep(interval);

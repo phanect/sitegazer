@@ -2,7 +2,7 @@
 
 ![GitHub Actions Status](https://github.com/phanect/sitegazer/workflows/GitHub%20Actions/badge.svg)
 
-SiteGazer crawls all of your pages and find errors from the crawled pages.
+Runtime Lint for Web Applications: SiteGazer find console errors & HTML errors from the generated HTML.
 
 ## Requirement
 
@@ -40,7 +40,6 @@ module.exports = {
     "https://google.com",
   ],
   sitemap: true,
-  crawl: true,
   plugins: [ "nu", "chrome-console" ],
 };
 ```
@@ -64,7 +63,6 @@ module.exports = {
     "https://google.com",
   ],
   sitemap: false,
-  crawl: false,
   plugins: [ "nu", "chrome-console" ],
   userAgents: {
     desktop: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36",
@@ -79,7 +77,6 @@ Type: `string[]`
 Default: `[]`
 
 URLs to lint.
-If `crawl: false` and `sitemap: false`, SiteGazer only lint the pages listed in `urls`.
 
 ### `sitemap`
 
@@ -87,13 +84,6 @@ Type: `boolean`
 Default: `true`
 
 If true, SiteGazer lint the URLs listed in sitemap.xml, in addition to URLs listed in `urls`.
-
-### `crawl`
-
-Type: `boolean`
-Default: `true`
-
-If true, SiteGazer detect `<a>` tags from the linted pages, and lint the detected URLs in addition to URLs listed in `urls`.
 
 ### `plugins`
 

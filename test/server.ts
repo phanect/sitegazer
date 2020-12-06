@@ -27,8 +27,7 @@ export default class {
               </script>
             </head>
             <body>
-              <a href="/link1">link 1</a>
-              <a href="/link2">link 2</a>
+              <p>Hello, World!</p>
             </body>
           </html>
         `);
@@ -43,44 +42,11 @@ export default class {
               </script>
             </head>
             <body>
-              <a href="/link1">link 1</a>
-              <a href="/link2">link 2</a>
+              <p>Hello, World!</p>
             </body>
           </html>
         `);
       }
-    });
-
-    app.get("/link1", (req, res) => {
-      res.send(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>test</title>
-          </head>
-          <body>
-            <a href="/">top</a>
-            <a href="/link2">link 2</a>
-            <a href="https://example.com/">link to external host (should not be crawled)</a>
-          </body>
-        </html>
-      `);
-    });
-
-    app.get("/link2", (req, res) => {
-      res.send(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>test</title>
-          </head>
-          <body>
-            <a href="/link1">link 1</a>
-            <a href="/">top</a>
-            <span> <!-- Error: unmatched HTML tag -->
-          </body>
-        </html>
-      `);
     });
 
     app.get("/sitemapped", (req, res) => {
