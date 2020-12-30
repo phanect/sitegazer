@@ -3,14 +3,14 @@
 const { join } = require("path");
 
 module.exports = {
-  extends: "plugin:@phanect/ts",
+  extends: "plugin:@phanect/plain",
 
   env: {
     browser: false,
     node: true,
   },
   parserOptions: {
-    project: join(__dirname, "./tsconfig.json"),
+    project: join(__dirname, "./tsconfig.eslint.json"),
   },
   plugins: [ "@phanect" ],
 
@@ -23,5 +23,5 @@ module.exports = {
     }],
     // Dynamic require() is frequently used in this project.
     "@typescript-eslint/no-var-requires": "off",
-  }
+  },
 };

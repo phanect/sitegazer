@@ -37,7 +37,14 @@ jobs:
       - run: npm run build
       - run: npm test
       - run: npm run lint
-      - run: npm run release-test
+      # npm 7 has a bug on `npm publish --dry-run`
+      # @see: https://github.com/npm/cli/issues/2411
+      - run: |
+          if [[ "$(npm --version)" == 7.* ]]; then
+            echo "Skipped release test"
+          else
+            npm run release-test
+          fi
 
   publish:
     needs: build
@@ -46,7 +53,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
           registry-url: https://registry.npmjs.org/
       - run: npm install
       - run: npm run build
