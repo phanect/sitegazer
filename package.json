@@ -22,7 +22,7 @@
   "scripts": {
     "start": "ts-node ./src/cli.ts",
     "build": "tsc",
-    "lint": "eslint --ext=.ts,.tsx .",
+    "lint": "eslint --ext=.js,.jsx,.ts,.tsx .",
     "release-test": "npm publish --dry-run --access public --non-interactive",
     "release": "npm publish --access public --non-interactive",
     "test": "jest --verbose --force-exit"
