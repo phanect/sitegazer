@@ -23,5 +23,5 @@ module.exports = {
     }],
     // Dynamic require() is frequently used in this project.
     "@typescript-eslint/no-var-requires": "off",
-  }
+  },
 };
