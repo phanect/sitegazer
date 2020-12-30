@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "commander": "^4.0.1",
+    "playwright": "^1.7.1",
     "puppeteer": "^2.0.0",
     "sitemapper": "^3.0.5",
     "vnu": "20.1.2"
