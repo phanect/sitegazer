@@ -10,7 +10,7 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    project: join(__dirname, "./tsconfig.json"),
+    project: join(__dirname, "./tsconfig.eslint.json"),
   },
   plugins: [ "@phanect" ],
 
