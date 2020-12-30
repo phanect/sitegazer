@@ -3,7 +3,7 @@
 const { join } = require("path");
 
 module.exports = {
-  extends: "plugin:@phanect/ts",
+  extends: "plugin:@phanect/plain",
 
   env: {
     browser: false,
