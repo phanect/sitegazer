@@ -33,4 +33,6 @@ commander.parse(process.argv);
       }
     }
   }
+
+  process.exit(0 < pages.length ? 1 : 0);
 })();
