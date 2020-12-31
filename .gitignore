@@ -40,11 +40,5 @@ yarn.lock
 # Build tools: Babel & Webpack
 dist/
 
-# Other tools
-
-# Ava
-test/snapshots/
+# ESLint
 .eslintcache
-
-# React Native
-.expo/
