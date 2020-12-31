@@ -2,6 +2,7 @@ import * as puppeteer from "puppeteer";
 import Sitemapper from "sitemapper";
 
 import Config from "./interfaces/Config";
+import Issue from "./interfaces/Issue";
 import Page from "./interfaces/Page";
 import Plugin from "./interfaces/Plugin";
 import Results from "./Results";
