@@ -1,6 +1,7 @@
 # SiteGazer
 
 ![GitHub Actions Status](https://github.com/phanect/sitegazer/workflows/GitHub%20Actions/badge.svg)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fphanect%2Fsitegazer.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fphanect%2Fsitegazer?ref=badge_shield)
 
 Runtime Lint for Web Applications: SiteGazer find console errors & HTML errors from the generated HTML.
 
@@ -115,3 +116,6 @@ If two or more user agent strings are given, SiteGazer lint with each user agent
 Apache 2.0
 
 &copy; 2019 Jumpei Ogawa
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fphanect%2Fsitegazer.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fphanect%2Fsitegazer?ref=badge_large)
