@@ -2,6 +2,7 @@ import * as puppeteer from "puppeteer";
 import Sitemapper from "sitemapper";
 
 import Config from "./interfaces/Config";
+import Issue from "./interfaces/Issue";
 import Page from "./interfaces/Page";
 import Plugin from "./interfaces/Plugin";
 import Results from "./Results";
@@ -69,17 +70,89 @@ class SiteGazer {
   }
 
   private async loadPage(url: string, deviceType: string, userAgent: string): Promise<void> {
-    const errors: Error[] = [];
-    const onError = (err: Error): void => {
-      errors.push(err);
-    };
+    const issues: Issue[] = [];
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
     page.setUserAgent(userAgent);
-    page.on("pageerror", onError);
-    page.on("error", onError);
+
+    page.on("console", msg => {
+      const msgType = msg.type();
+
+      if (
+        msgType === "error" ||
+        msgType === "warning" ||
+        msgType === "assert" ||
+        msgType === "trace"
+      ) {
+        const location = msg.location();
+
+        return issues.push({
+          pageURL: url,
+          fileURL: location.url,
+          deviceType,
+          pluginName: "Chrome Console",
+          message: msg.text(),
+          line: location.lineNumber,
+          column: location.columnNumber,
+        });
+      }
+    }).on("error", err => {
+      this.results.add({
+        pageURL: url,
+        fileURL: url,
+        deviceType,
+        pluginName: null,
+        message: err.message,
+        line: 0,
+        column: 0,
+      });
+    }).on("pageerror", err => {
+      // msg: e.g. " Error: Something is wrong in desktop site."
+      // stacktrace: e.g. "        at http://localhost:3456/:7:23"
+      const [ msg, stacktrace ] = err.message.split("\n");
+
+      const destructuredStacktrace = stacktrace
+        .trim() // "        at http://localhost:3456/:7:23" -> "at http://localhost:3456/:7:23"
+        .replace("at ", "") // "at http://localhost:3456/:7:23" -> "http://localhost:3456/:7:23"
+        .split(":"); // "http://localhost:3456/:7:23" -> [ "http", "//localhost", "3456/" "7", "23" ]
+      const column = parseInt(destructuredStacktrace.pop());
+      const line = parseInt(destructuredStacktrace.pop());
+      const fileURL = destructuredStacktrace.join(":");
+
+      issues.push({
+        pageURL: url,
+        fileURL,
+        deviceType,
+        pluginName: "Chrome Console",
+        message: msg.trim(),
+        line,
+        column,
+      });
+    }).on("requestfailed", req => {
+      issues.push({
+        pageURL: url,
+        fileURL: req.url(),
+        deviceType,
+        pluginName: "Chrome Console",
+        message: req.failure().errorText,
+        line: 0, // TODO
+        column: 0, // TODO
+      });
+    }).on("requestfinished", (req) => {
+      const res = req.response();
+
+      issues.push({
+        pageURL: url,
+        fileURL: req.url(),
+        deviceType,
+        pluginName: "Chrome Console",
+        message: `${res.status()} ${res.statusText()}`,
+        line: 0, // TODO
+        column: 0, // TODO
+      });
+    });
 
     try {
       const res = await page.goto(url);
@@ -100,7 +173,7 @@ class SiteGazer {
 
       await browser.close();
 
-      return this.processURL(pageURL, html, deviceType, userAgent, errors);
+      return this.processURL(pageURL, html, deviceType, userAgent, issues);
     } catch (err) {
       if (err.message.startsWith("net::ERR_CONNECTION_REFUSED")) {
         this.results.add({
@@ -136,7 +209,7 @@ class SiteGazer {
     }
   }
 
-  private async processURL(url: string, html: string, deviceType: string, userAgent: string, browserErrors: Error[]): Promise<void> {
+  private async processURL(url: string, html: string, deviceType: string, userAgent: string, issues: Issue[]): Promise<void> {
     console.info(`Processed ${url} (${deviceType})`);
 
     for (const plugin of this.plugins) {
@@ -145,7 +218,7 @@ class SiteGazer {
         html,
         deviceType,
         userAgent,
-        browserErrors,
+        issues,
       }));
     }
   }
